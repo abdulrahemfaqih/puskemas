@@ -41,6 +41,22 @@ function getAllKateObat() {
 }
 
 
+function ubahObat($data) {
+    $id_obat = htmlspecialchars($data["id_obat"]);
+    $nama_obat = htmlspecialchars($data["nama_obat"]);
+    $id_jenis_obat = htmlspecialchars($data["id_jenis_obat"]);
+    $id_kategori_obat = htmlspecialchars($data["id_kategori_obat"]);
+    $stok_obat = htmlspecialchars($data["stok_obat"]);
+    $harga_obat = htmlspecialchars($data["harga_obat"]);
+
+    mysqli_query(DB,"UPDATE tb_obat SET
+    NAMA_OBAT = '$nama_obat',
+    ID_JENIS_OBAT = '$id_jenis_obat',
+    ID_KATEGORI_OBAT = '$id_kategori_obat',
+    STOK_OBAT = '$stok_obat',
+    HARGA_OBAT = '$harga_obat'
+    WHERE ID_OBAT = '$id_obat'");
+}
 
 function tambahObat($data) {
     $id_obat = htmlspecialchars($data["id_obat"]);
@@ -52,6 +68,10 @@ function tambahObat($data) {
 
     mysqli_query(DB, "INSERT INTO tb_obat (ID_OBAT, ID_JENIS_OBAT, ID_KATEGORI_OBAT, NAMA_OBAT, STOK_OBAT, HARGA_OBAT)
                       VALUES ('$id_obat', '$id_jenis_obat', '$id_kategori_obat', '$nama_obat', '$stok_obat', '$harga_obat')");
+}
+
+function hapusObat($id_obat) {
+    mysqli_query(DB, "DELETE FROM tb_obat WHERE id_obat = '$id_obat'");
 }
 
 function formatHarga(float|int|string $harga): int|float|string

@@ -3,17 +3,26 @@ $title = "Data Obat";
 include "layouts/header.php";
 include "../data/database.php";
 
-
-
 $allObat = getAllObat();
 $allJenisObat = getAllJenisObat();
 $allKategoriObat = getAllKateObat();
+
+if (isset($_POST["t_ubah"])) {
+
+    ubahObat($_POST);
+    header("Location: data_obat.php");
+}
 
 if (isset($_POST["t_tambah"])) {
     tambahObat($_POST);
     header("Location: data_obat.php");
 }
 
+if (isset($_POST["t_hapus"])) {
+    $id_obat = $_POST["id_obat"];
+    hapusObat($id_obat);
+    header("Location: data_obat.php");
+}
 ?>
 
 <body class="hold-transition sidebar-mini">
@@ -49,36 +58,33 @@ if (isset($_POST["t_tambah"])) {
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Default Modal</h4>
+                                <h4 class="modal-title">Form Tambah Obat</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-
                                 <?php $id_obat = generateID("tb_obat", "id_obat", "OB"); ?>
-
                                 <div class="mb-3">
                                     <label>ID OBAT</label>
-                                    <input type="text" class="form-control" name="id_obat" value="<?= $id_obat ?>">
+                                    <input type="text" readonly class="form-control" name="id_obat" value="<?= $id_obat ?>">
                                 </div>
                                 <div class="mb-3">
                                     <label>NAMA OBAT</label>
-                                    <input type="text" class="form-control" name="nama_obat">
+                                    <input type="text" class="form-control" name="nama_obat" required>
                                 </div>
                                 <div class="mb-3">
                                     <label>JENIS OBAT</label>
-                                    <select class="form-control select2" name="id_jenis_obat" style="width: 100%;">
+                                    <select class="form-control select2" name="id_jenis_obat" required style="width: 100%;">
                                         <option value="" disabled selected>PILIH OBAT</option>
                                         <?php foreach ($allJenisObat as $j) : ?>
                                             <option value="<?= $j["ID_JENIS_OBAT"] ?>"><?= $j["NAMA_JENIS_OBAT"] ?></option>
                                         <?php endforeach; ?>
                                     </select>
-
                                 </div>
                                 <div class="mb-3">
                                     <label>KATEGORI OBAT</label>
-                                    <select class="form-control select2" name="id_kategori_obat" style="width: 100%;">
+                                    <select class="form-control select2" name="id_kategori_obat" required style="width: 100%;">
                                         <option value="" disabled selected>PILIH OBAT</option>
                                         <?php foreach ($allKategoriObat as $k) : ?>
                                             <option value="<?= $k["ID_KATEGORI_OBAT"] ?>"><?= $k["NAMA_KATEGORI_OBAT"] ?></option>
@@ -87,11 +93,11 @@ if (isset($_POST["t_tambah"])) {
                                 </div>
                                 <div class="mb-3">
                                     <label>STOK OBAT</label>
-                                    <input type="number" class="form-control" name="stok_obat">
+                                    <input type="number" class="form-control" name="stok_obat" required>
                                 </div>
                                 <div class="mb-3">
                                     <label>HARGA OBAT</label>
-                                    <input type="number" class="form-control" name="harga_obat">
+                                    <input type="number" class="form-control" name="harga_obat" required>
                                 </div>
 
                             </div>
@@ -124,7 +130,7 @@ if (isset($_POST["t_tambah"])) {
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>ID OBAT</th>
+                                                <th style="width: 30px;">NO</th>
                                                 <th>NAMA OBAT</th>
                                                 <th>JENIS OBAT</th>
                                                 <th>KATEGORI OBAT</th>
@@ -134,9 +140,9 @@ if (isset($_POST["t_tambah"])) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($allObat as $b) : ?>
+                                            <?php $no = 1; foreach ($allObat as $b) : ?>
                                                 <tr>
-                                                    <td><?= $b["ID_OBAT"] ?></td>
+                                                    <td><?= $no++ ?></td>
                                                     <td><?= $b["NAMA_OBAT"] ?></td>
                                                     <td><?= $b["NAMA_JENIS_OBAT"] ?></td>
                                                     <td><?= $b["NAMA_KATEGORI_OBAT"] ?></td>
@@ -155,49 +161,88 @@ if (isset($_POST["t_tambah"])) {
                                                 <div class="modal fade" id="modal_edit<?= $b["ID_OBAT"] ?>">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">Form Edit Obat</h4>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">×</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p>One fine body…</p>
-                                                            </div>
-                                                            <div class="modal-footer justify-content-between">
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                                            </div>
+                                                            <form action="" method="post">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Form Edit Obat</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="modal-body">
+                                                                        <input type="hidden" class="form-control" name="id_obat" value="<?= $b["ID_OBAT"] ?>">
+                                                                        <div class="mb-3">
+                                                                            <label>NAMA OBAT</label>
+                                                                            <input type="text" class="form-control" name="nama_obat" value="<?= $b["NAMA_OBAT"] ?>">
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label>JENIS OBAT</label>
+                                                                            <select class="form-control select2" name="id_jenis_obat" style="width: 100%;">
+                                                                                <option value="" disabled selected>PILIH OBAT</option>
+                                                                                <?php foreach ($allJenisObat as $j) : ?>
+                                                                                    <option value="<?= $j["ID_JENIS_OBAT"] ?>" <?= $j["ID_JENIS_OBAT"] == $b["ID_JENIS_OBAT"] ? "selected" : '' ?>><?= $j["NAMA_JENIS_OBAT"] ?></option>
+                                                                                <?php endforeach; ?>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label>KATEGORI OBAT</label>
+                                                                            <select class="form-control select2" name="id_kategori_obat" style="width: 100%;">
+                                                                                <option value="" disabled selected>PILIH OBAT</option>
+                                                                                <?php foreach ($allKategoriObat as $k) : ?>
+                                                                                    <option value="<?= $k["ID_KATEGORI_OBAT"] ?>" <?= $k["ID_KATEGORI_OBAT"] == $b["ID_KATEGORI_OBAT"] ? "selected" : '' ?>><?= $k["NAMA_KATEGORI_OBAT"] ?></option>
+                                                                                <?php endforeach; ?>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label>STOK OBAT</label>
+                                                                            <input type="number" class="form-control" name="stok_obat" value="<?= $b["STOK_OBAT"] ?>">
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label>HARGA OBAT</label>
+                                                                            <input type="number" class="form-control" name="harga_obat" value="<?= $b["HARGA_OBAT"] ?>">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer justify-content-between">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    <button type="submit" name="t_ubah" class="btn btn-primary">Save changes</button>
+                                                                </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <!-- end modal edit obat -->
-                                                <!-- modal edit obat -->
+
+
+                                                <!-- modal hapus obat -->
                                                 <div class="modal fade" id="modal_hapus<?= $b["ID_OBAT"] ?>">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">KONFIRMASI HAPUS OBAT</h4>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">×</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p>One fine body…</p>
-                                                            </div>
-                                                            <div class="modal-footer justify-content-between">
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                                            </div>
+                                                            <form action="" method="post">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">KONFIRMASI HAPUS OBAT</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">×</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <input type="hidden" name="id_obat" value="<?= $b["ID_OBAT"] ?>">
+                                                                    <p><?= $b["NAMA_OBAT"] ?></p>
+                                                                </div>
+                                                                <div class="modal-footer justify-content-between">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    <button type="submit" name="t_hapus" class="btn btn-danger">Hapus</button>
+                                                                </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- end modal edit obat -->
+                                                <!-- end modal hapus obat -->
                                             <?php endforeach; ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>ID OBAT</th>
+                                                <th>NO</th>
                                                 <th>NAMA OBAT</th>
                                                 <th>JENIS OBAT</th>
                                                 <th>KATEGORI OBAT</th>
