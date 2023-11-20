@@ -13,7 +13,7 @@
              <div class="collapse navbar-collapse" id="navbarColor01">
                  <ul class="navbar-nav ms-auto justify-content-end navbar1">
                      <li class="nav-item mr-3">
-                         <a class="nav-link " href="#carousel">Home
+                         <a class="nav-link " href="index.php">Home
 
                          </a>
                      </li>

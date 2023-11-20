@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 $title = "Antrian";
 include "layouts/header.php";
 ?>
@@ -80,7 +82,7 @@ include "layouts/header.php";
                         <th>Aksi</th>
                     </tr>
                     </tfoot>
-                
+
 
     </div>
 

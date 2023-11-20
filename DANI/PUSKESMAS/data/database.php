@@ -59,9 +59,7 @@ function InsertDataDokter($data)
     return mysqli_query(DB, $query);
 }
 
-// INSERT END DOKTER
 
-// ==============================================Edit sDokter================================= //
 
 function editedDokter($data)
 {

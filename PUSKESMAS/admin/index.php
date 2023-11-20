@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION["login"])) {
+    header("location: login.php");
+    exit;
+}
+
 $title = "Dashboard";
 include "layouts/header.php"
 ?>
