@@ -1,6 +1,6 @@
 <?php
 include "koneksi.php";
-include "../config/config.php";
+include "config/config.php";
 
 function query($query)
 {
@@ -77,4 +77,25 @@ function hapusObat($id_obat) {
 function formatHarga(float|int|string $harga): int|float|string
 {
     return "Rp. " . number_format($harga, 2, ",", ".");
+}
+
+// ==================================== USER ================================
+function getDataPasien($username)
+{
+    return mysqli_query(DB, "SELECT * FROM tb_pasien WHERE PASIEN_USERNAME = '$username'")->fetch_all(MYSQLI_ASSOC)[0];
+}
+
+function registrasiPasien($data) {
+    $id_pasien = htmlspecialchars($data['id_pasien']);
+    $nama = htmlspecialchars($data['name']);
+    $username = htmlspecialchars($data['username']);
+    $nohp = htmlspecialchars($data['nohp']);
+    $alamat = htmlspecialchars($data['alamat']);
+    $email = htmlspecialchars($data['email']);
+    $password = htmlspecialchars(md5($data['password'])); // Encrypt Password
+    $jk_pasien = htmlspecialchars($data['jk_pasien']);
+
+    $query = "INSERT INTO tb_pasien(ID_PASIEN, NAMA_PASIEN, TELP,ALAMAT, JENIS_KELAMIN, EMAIL, PASIEN_PASSWORD, PASIEN_USERNAME) VALUES ('$id_pasien', '$nama', '$nohp','$alamat', '$jk_pasien', '$email', '$password', '$username')";
+    $result = mysqli_query(DB, $query);
+    return $result;
 }

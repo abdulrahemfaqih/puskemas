@@ -1,91 +1,76 @@
+<?php include "data/database.php"; ?>
+<?php
+session_start();
+if (isset($_POST['submitlogin'])) {
+    $password = $_POST["password"];
+    $userame = $_POST["username"];
+
+    $data_pasien = getDataPasien($userame);
+    if (!empty($data_pasien)) {
+        if (md5($password) == $data_pasien["PASIEN_PASSWORD"]) {
+            $_SESSION["login"] = true;
+            $_SESSION["nama"] = $data_pasien["NAMA_PASIEN"];
+            $_SESSION["username"] = $data_pasien["PASIEN_USERNAME"];
+            $nama = $_SESSION["nama"];
+            echo "<script>
+            alert('login sukses, Selamat Datang $nama')
+            window.location.href = 'index.php';
+            </script>";
+            exit;
+        } else {
+            $error = "<script>alert('password dan username tidak cocok')</script>";
+        }
+    } else {
+        echo "<script>alert('username tidak ditemukan')</script>";
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Log in (v2)</title>
-
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="assets/plugins/fontawesome-free/css/all.min.css">
-  <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="assets/dist/css/adminlte.min.css">
+    <meta charset="UTF-8" id="home">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMS</title>
+    <link rel="stylesheet" href="front/css/bootstrap.min (1).css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="front/css/style.css">
+    <link rel="stylesheet" href="front/css/user_login.css">
 </head>
-<body class="hold-transition login-page">
-<div class="login-box">
-  <!-- /.login-logo -->
-  <div class="card card-outline card-primary">
-    <div class="card-header text-center">
-      <a href="assets/index2.html" class="h1"><b>Admin</b>LTE</a>
+
+<body>
+
+    <!-- login detials  -->
+    <div class="container">
+        <div class="login-container">
+            <h2>User Login</h2>
+            <form action="" method="post">
+                <div class="form-group">
+                    <label for="useroremail">Username :</label>
+                    <input type="text" class="form-control" id="useroremail" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <a href="#"><button type="submit" class="btn btn-primary" name="submitlogin">Login</button></a>
+                <div class="btn-container">
+                    <span>
+                        <a href="index.php" class="btn btn-link">Batal</a>
+                    </span>
+                    <span>
+                        <a href="register.php" class="btn btn-link">Register</a>
+                    </span>
+                </div>
+
+            </form>
+        </div>
     </div>
-    <div class="card-body">
-      <p class="login-box-msg">Sign in to start your session</p>
 
-      <form action="assets/index3.html" method="post">
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
-
-      <div class="social-auth-links text-center mt-2 mb-3">
-        <a href="#" class="btn btn-block btn-primary">
-          <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-        </a>
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-        </a>
-      </div>
-      <!-- /.social-auth-links -->
-
-      <p class="mb-1">
-        <a href="forgot-password.html">I forgot my password</a>
-      </p>
-      <p class="mb-0">
-        <a href="register.html" class="text-center">Register a new membership</a>
-      </p>
-    </div>
-    <!-- /.card-body -->
-  </div>
-  <!-- /.card -->
-</div>
-<!-- /.login-box -->
-
-<!-- jQuery -->
-<script src="assets/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="assets/dist/js/adminlte.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
