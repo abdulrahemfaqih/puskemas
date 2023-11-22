@@ -79,7 +79,6 @@ $data_reservasi_rm = getDataAntrianAndPemeriksaanByIdPasien($id_pasien);
                     </thead>
                     <tbody>
                         <?php if (!empty($data_reservasi_rm)) : $no = 1 ?>
-                            <?php var_dump($data_reservasi_rm) ?>
                             <?php foreach ($data_reservasi_rm as $data) : ?>
                                 <tr>
                                     <td><?= $no++ ?></td>

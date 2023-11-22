@@ -9,18 +9,10 @@ if (empty($_SESSION["login_admin"])) {
 $data_antrian = getDataAntrianAndPemeriksaan();
 
 
-if (isset($_GET["hapus_id"])) {
-    $id = $_GET["hapus_id"];
-    if (hapusPemeriksan($id)) {
-        echo "<script>
-        alert('id pemeriksaan $id berhasil dihapus')
-        window.location.href = 'antrian.php?tab=antrian'
-        </script>";
-    }
-}
 
 
-$title = "Data Antrian";
+
+$title = "Proses Reservasi";
 include "layouts/header.php";
 
 ?>
@@ -41,7 +33,7 @@ include "layouts/header.php";
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Antrian</h1>
+                            <h1>Proses Reservasi</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -60,14 +52,14 @@ include "layouts/header.php";
                             <!-- /.card -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Poli</h3>
+                                    <h3 class="card-title">Proses Reservasi</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th style="width: 170px;">AKSI</th>
+                                                <th style="width: 110px;">AKSI</th>
                                                 <th style="width: 30px;">NO</th>
                                                 <th>ID ANTRIAN </th>
                                                 <th>TANGGAL ANTRIAN</th>
@@ -81,13 +73,12 @@ include "layouts/header.php";
                                             foreach ($data_antrian as $d) : ?>
                                                 <tr>
                                                     <td>
-                                                        <a class="btn btn-danger btn-sm" onclick="return confirm('yakin ingin menghapus')" href="antrian.php?hapus_id=<?= $d["ID_PEMERIKSAAN"] ?>">
+                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal_edit<?= $p["ID_POLI"] ?>">
                                                             Batal
-                                                        </a>
-
-                                                        <a class="btn btn-success btn-sm" href="proses_reservasi.php?tab=antrian">
-                                                            Proses Pemeriksaan
-                                                        </a>
+                                                        </button>
+                                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal_hapus<?= $p["ID_POLI"] ?>">
+                                                            Proses
+                                                        </button>
                                                     </td>
                                                     <td><?= $no++ ?></td>
                                                     <td><?= $d["ID_PEMERIKSAAN"] ?></td>

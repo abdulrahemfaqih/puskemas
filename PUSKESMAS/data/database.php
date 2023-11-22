@@ -290,7 +290,7 @@ function getDataLogin($username)
     WHERE tb_user.USERNAME = '$username';")->fetch_assoc();
 }
 
-//==============================TABEL ANTRIAN ======================
+//==============================TABEL PEMERIKSAAN ======================
 
 function getDataAntrianAndPemeriksaanByIdPasien($id_pasien)
 {
@@ -304,6 +304,9 @@ function getDataAntrianAndPemeriksaan()
     LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN")->fetch_all(MYSQLI_ASSOC);
 }
 
+function hapusPemeriksan($id_pemeriksaan) {
+    return mysqli_query(DB, "DELETE FROM tb_pemeriksaan WHERE ID_PEMERIKSAAN = '$id_pemeriksaan'");
+}
 
 
 

@@ -53,6 +53,7 @@ $current_tab = isset($_GET["tab"]) ? $_GET["tab"] : '';
                         </p>
                     </a>
                 </li>
+                <?php if($_SESSION == 2) : ?>
                 <li class="nav-item">
                     <a href="pemeriksaan.php?tab=pemeriksaan" class="nav-link <?= $current_tab == 'pemeriksaan' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-stethoscope"></i>
@@ -61,6 +62,7 @@ $current_tab = isset($_GET["tab"]) ? $_GET["tab"] : '';
                         </p>
                     </a>
                 </li>
+                <?php endif; ?>
                 <?php if ($_SESSION["level_admin"] == 1) : ?>
                     <li class="nav-item <?= ($current_tab == 'data_admin' || $current_tab == 'data_dokter' || $current_tab == 'data_poli' || $current_tab == 'data_obat') ? 'menu-open' : ''; ?>">
                         <a href="#" class="nav-link">
