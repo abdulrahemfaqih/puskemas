@@ -16,11 +16,11 @@ if (isset($_POST["login"])) {
 
     if (!empty($user)) {
         if ((md5($password)) == $user["PASSWORD"]) {
-            $_SESSION["ID_USER"] = $user["ID_USER"];
-            $_SESSION["LEVEL"] = $user["LEVEL"];
-            $_SESSION["USERNAME"] = $user["USERNAME"];
-            $_SESSION["login"] = true;
-            $_SESSION["nama"] = $nama;
+            $_SESSION["id_user_admin"] = $user["ID_USER"];
+            $_SESSION["level_admin"] = $user["LEVEL"];
+            $_SESSION["username_admin"] = $user["USERNAME"];
+            $_SESSION["login_admin"] = true;
+            $_SESSION["nama_admin"] = $nama;
             echo "<script>
             alert('login sukses, Selamat Datang $nama ')
             window.location.href = 'index.php';

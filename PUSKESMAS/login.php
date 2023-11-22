@@ -8,10 +8,10 @@ if (isset($_POST['submitlogin'])) {
     $data_pasien = getDataPasien($userame);
     if (!empty($data_pasien)) {
         if (md5($password) == $data_pasien["PASIEN_PASSWORD"]) {
-            $_SESSION["login"] = true;
-            $_SESSION["nama"] = $data_pasien["NAMA_PASIEN"];
-            $_SESSION["username"] = $data_pasien["PASIEN_USERNAME"];
-            $nama = $_SESSION["nama"];
+            $_SESSION["login_pasien"] = true;
+            $_SESSION["nama_pasien"] = $data_pasien["NAMA_PASIEN"];
+            $_SESSION["username_pasien"] = $data_pasien["PASIEN_USERNAME"];
+            $nama = $_SESSION["nama_pasien"];
             echo "<script>
             alert('login sukses, Selamat Datang $nama')
             window.location.href = 'index.php';

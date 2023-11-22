@@ -4,7 +4,7 @@
         <img src="../assets/dist/img/logo-puskesmas.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">PUSKESMAS TELANG</span>
     </a>
-    <?php $nama = $_SESSION["nama"] ?>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
@@ -12,9 +12,12 @@
             <div class="image">
                 <img src="../assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
             </div>
-            <div class="info">
-                <a href="#" class="d-block"><?= $nama ?></a>
-            </div>
+            <?php if (isset($_SESSION["login_admin"])) : ?>
+                <?php $nama = $_SESSION["nama_admin"] ?>
+                <div class="info">
+                    <a href="#" class="d-block"><?= $nama ?></a>
+                </div>
+            <?php endif ?>
         </div>
 
 
@@ -55,7 +58,7 @@
                         </p>
                     </a>
                 </li>
-                <?php if ($_SESSION["LEVEL"] == 1) : ?>
+                <?php if ($_SESSION["level_admin"] == 1) : ?>
                     <li class="nav-item menu-is-opening">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
@@ -137,7 +140,7 @@
                         </a>
                     </li>
                 <?php endif; ?>
-                <?php if (isset($_SESSION["login"])) : ?>
+                <?php if (isset($_SESSION["login_admin"])) : ?>
                     <li class="nav-item">
                         <a href="logout.php" class="nav-link">
                             <i class="fa-solid fa-right-from-bracket"></i>

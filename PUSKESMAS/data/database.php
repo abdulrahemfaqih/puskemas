@@ -194,9 +194,9 @@ function getAllAdmin() {
     return mysqli_query(DB, "SELECT * FROM tb_admin")->fetch_all(MYSQLI_ASSOC);
 }
 
-function tambahAdmin($data) {
-    return mysqli_query(DB, "INSERT INTO tb_admin (ID_ADMIN, ")
-}
+// function tambahAdmin($data) {
+//     return mysqli_query(DB, "INSERT INTO tb_admin (ID_ADMIN, ")
+// }
 
 // ======================================= TABEL POLI =================================================
 

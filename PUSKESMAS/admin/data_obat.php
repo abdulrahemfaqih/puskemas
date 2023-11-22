@@ -3,6 +3,11 @@ $title = "Data Obat";
 include "layouts/header.php";
 include "../data/database.php";
 
+if (!isset($_SESSION["login_admin"])) {
+    header("Location: index.php");
+    exit;
+}
+
 $allObat = getAllObat();
 $allJenisObat = getAllJenisObat();
 $allKategoriObat = getAllKateObat();
