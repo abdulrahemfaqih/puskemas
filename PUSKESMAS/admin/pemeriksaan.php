@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 $title = "Pemeriksaan";
 include "layouts/header.php";
 ?>
@@ -27,7 +29,7 @@ include "layouts/header.php";
         <section class="content">
 
             <div class="container-fluid">
-                <div class="row"> 
+                <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">

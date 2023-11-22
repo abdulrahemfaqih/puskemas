@@ -66,7 +66,7 @@ include "layouts/header.php";
         <?php include "layouts/navbar.php" ?>
         <!-- /.navbar -->
 
-        <!-- Main Sidebar Container -->
+        <!-- Main Sidebar Container-->
         <?php include "layouts/sidebar.php" ?>
 
         <!-- Content Wrapper. Contains page content -->
@@ -187,7 +187,7 @@ include "layouts/header.php";
                                                                         </div>
                                                                         <div class="mb-3">
                                                                             <label>RUANGAN POLI</label>
-                                                                            <input type="number" class="form-control" name="ruangan" value="<?= $p["RUANGAN"] ?>">
+                                                                            <input type="text" class="form-control" name="ruangan" value="<?= $p["RUANGAN"] ?>">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -214,8 +214,8 @@ include "layouts/header.php";
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <input type="hidden" name="id_admin" value="<?= $p["ID_POLI"] ?>">
-                                                                    <input type="text" readonly class="form-control" name="id_poli" value="<?= $p["NAMA_POLI"] ?>">
+                                                                    <input type="hidden" name="id_poli" value="<?= $p["ID_POLI"] ?>">
+                                                                    <input type="text" readonly class="form-control" name="nama_poli" value="<?= $p["NAMA_POLI"] ?>">
                                                                 </div>
                                                                 <div class="modal-footer justify-content-between">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

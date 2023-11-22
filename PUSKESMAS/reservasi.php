@@ -2,13 +2,32 @@
 include "data/database.php";
 session_start();
 
+$id_pasien = $_SESSION["id_pasien"];
+
+
 if (empty($_SESSION["login_pasien"])) {
     echo "<script>
         alert('login terlebih dahulu');
         window.location.href = 'index.php'
     </script>";
+}
 
 
+if (isset($_POST["submit"])) {
+    $id_reservasi = $_POST["id_pe"];
+    $tanggal = $_POST["tgl_reservasi"];
+    if(tambahPemeriksaan($_POST)) {
+        echo "<script>
+        alert('id reservasi $id_reservasi telah dibuat, silah kan datang di tanggal $tanggal ');
+        window.location.href = 'profile.php'
+        </script>";
+
+    } else {
+        echo "<script>
+        alert('id reservasi $id_reservasi gagal dibuat');
+        window.location.href = 'profile.php'
+        </script>";
+    }
 }
 
 
@@ -34,24 +53,26 @@ if (empty($_SESSION["login_pasien"])) {
                 <div class="card-body">
                     <div class="mb-3">
                         <?php
-                        $rm_id = generateID("tb_reservasi", "ID_RESERVASI", "RE");
+                        $id_pemeriksann = generateID("tb_pemeriksaan", "ID_PEMERIKSAAN", "PE");
+                        $no_antrian = generateNoAntrian();
                         ?>
-                        <label for="id_rm" class="form-label h6">ID RM</label>
-                        <input class="form-control bg-secondary-subtle" readonly type="text" name="id_rm" id="id_rm" value="<?= $rm_id ?>">
+                        <label for="id_pe" class="form-label">ID RESERVASI</label>
+                        <input class="form-control bg-secondary-subtle" readonly type="text" name="id_pe" id="id_pe" value="<?= $id_pemeriksann ?>">
+                        <input type="hidden" name="id_pasien" value="<?= $id_pasien ?>">
+                        <input type="hidden" name="no_antrian" value="<?= $no_antrian ?>">
                     </div>
                     <div class="mb-3">
                         <?php
                         date_default_timezone_set("Asia/Jakarta");
                         $tanggal = date("Y/m/d");
                         ?>
-                        <label for="tgl_periksa" class="form-label h6">Tanggal Periksa</label>
-                        <input type="text" class="form-control" name="tgl_periksa" id="tgl_periksa" value="<?= $tanggal ?>">
+                        <label for="tgl_reservasi" class="form-label h6">Tanggal Reservasi</label>
+                        <input type="text" class="form-control" name="tgl_reservasi" id="tgl_reservasi" value="<?= $tanggal ?>">
                     </div>
                     <div class="mb-3">
                         <label for="keluhan" class="form-label h6">Keluhan</label>
                         <textarea class="form-control" name="keluhan" id="keluhan" rows="3"></textarea>
                     </div>
-
 
 
                     <div class="d-flex justify-content-center">

@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 $title = "Transaksi";
 include "layouts/header.php";
 ?>
@@ -27,7 +29,7 @@ include "layouts/header.php";
         <section class="content">
 
             <div class="container-fluid">
-               
+
             </div>
 
     </div>

@@ -3,12 +3,16 @@ session_start();
 
 include "data/database.php";
 
-if (!isset($_SESSION["login"])) {
+if (!isset($_SESSION["login_pasien"])) {
     header("login.php");
     exit;
 }
+$id_pasien = $_SESSION["id_pasien"];
 
-$data_pasien = isset($_SESSION["username"]) ? getDataPasien($_SESSION["username"]) : "";
+$data_pasien = isset($_SESSION["username_pasien"]) ? getDataPasien($_SESSION["username_pasien"]) : "";
+
+$data_reservasi_rm = getDataAntrianAndPemeriksaanByIdPasien($id_pasien);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,8 +67,9 @@ $data_pasien = isset($_SESSION["username"]) ? getDataPasien($_SESSION["username"
                     <thead class="table-primary">
                         <tr>
                             <th>NO</th>
-                            <th>ID RM</th>
+                            <th>ID</th>
                             <th>TANGGAL</th>
+                            <th>NOMOR ANTRIAN</th>
                             <th>NAMA PASIEN</th>
                             <th>KELUHAN</th>
                             <th>DIAGNOSA</th>
@@ -73,6 +78,26 @@ $data_pasien = isset($_SESSION["username"]) ? getDataPasien($_SESSION["username"
                         </tr>
                     </thead>
                     <tbody>
+                        <?php if (!empty($data_reservasi_rm)) : $no = 1 ?>
+                            <?php var_dump($data_reservasi_rm) ?>
+                            <?php foreach ($data_reservasi_rm as $data) : ?>
+                                <tr>
+                                    <td><?= $no++ ?></td>
+                                    <td><?= $data["ID_PEMERIKSAAN"] ?></td>
+                                    <td><?= $data["TGL_RESERVASI"] ?></td>
+                                    <td><?= $data["NO_ANTRIAN"] ?></td>
+                                    <td><?= $data["NAMA_PASIEN"] ?></td>
+                                    <td><?= $data["KELUHAN"] ?></td>
+                                    <td><?= $data["DIAGNOSA"] ?></td>
+                                    <td><?= $data["HASIL_PEMERIKSAAN"] ?></td>
+                                    <td></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr>
+                                <td class="text-center fw-bold" colspan="9">Belum ada data</td>
+                            </tr>
+                        <?php endif; ?>
 
                     </tbody>
                 </table>

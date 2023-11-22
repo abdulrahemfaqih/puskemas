@@ -31,16 +31,19 @@ function generateID($table, $kolom, $prefix)
     return $new_id;
 }
 
-function getAllJenisObat() {
+function getAllJenisObat()
+{
     return mysqli_query(DB, "SELECT * FROM tb_jenis_obat");
 }
 
-function getAllKateObat() {
+function getAllKateObat()
+{
     return mysqli_query(DB, "SELECT * FROM tb_kategori_obat");
 }
 
 
-function ubahObat($data) {
+function ubahObat($data)
+{
     $id_obat = htmlspecialchars($data["id_obat"]);
     $nama_obat = htmlspecialchars($data["nama_obat"]);
     $id_jenis_obat = htmlspecialchars($data["id_jenis_obat"]);
@@ -48,7 +51,7 @@ function ubahObat($data) {
     $stok_obat = htmlspecialchars($data["stok_obat"]);
     $harga_obat = htmlspecialchars($data["harga_obat"]);
 
-    mysqli_query(DB,"UPDATE tb_obat SET
+    mysqli_query(DB, "UPDATE tb_obat SET
     NAMA_OBAT = '$nama_obat',
     ID_JENIS_OBAT = '$id_jenis_obat',
     ID_KATEGORI_OBAT = '$id_kategori_obat',
@@ -57,7 +60,8 @@ function ubahObat($data) {
     WHERE ID_OBAT = '$id_obat'");
 }
 
-function tambahObat($data) {
+function tambahObat($data)
+{
     $id_obat = htmlspecialchars($data["id_obat"]);
     $nama_obat = htmlspecialchars($data["nama_obat"]);
     $id_jenis_obat = htmlspecialchars($data["id_jenis_obat"]);
@@ -69,7 +73,8 @@ function tambahObat($data) {
                       VALUES ('$id_obat', '$id_jenis_obat', '$id_kategori_obat', '$nama_obat', '$stok_obat', '$harga_obat')");
 }
 
-function hapusObat($id_obat) {
+function hapusObat($id_obat)
+{
     mysqli_query(DB, "DELETE FROM tb_obat WHERE id_obat = '$id_obat'");
 }
 
@@ -85,7 +90,8 @@ function getDataPasien($username)
     return mysqli_query(DB, "SELECT * FROM tb_pasien WHERE PASIEN_USERNAME = '$username'")->fetch_all(MYSQLI_ASSOC)[0];
 }
 
-function registrasiPasien($data) {
+function registrasiPasien($data)
+{
     $id_pasien = htmlspecialchars($data['id_pasien']);
     $nama = htmlspecialchars($data['name']);
     $username = htmlspecialchars($data['username']);
@@ -187,14 +193,16 @@ function deleteDokter($data)
 // ======================================= ADMIN =======================================================
 
 
-function getAllAdmin() {
+function getAllAdmin()
+{
     return mysqli_query(DB, "SELECT tb_admin.*, tb_user.USERNAME
     FROM tb_admin
     LEFT JOIN tb_user ON tb_admin.ID_USER = tb_user.ID_USER
     ")->fetch_all(MYSQLI_ASSOC);
 }
 
-function tambahAdmin($data) {
+function tambahAdmin($data)
+{
     $id_user = mysqli_insert_id(DB);
     $id_admin = htmlspecialchars($data["id_admin"]);
     $nama_admin = htmlspecialchars($data["nama_admin"]);
@@ -207,7 +215,8 @@ function tambahAdmin($data) {
     ");
 }
 
-function ubahAdmin($data) {
+function ubahAdmin($data)
+{
     $id_admin = htmlspecialchars($data["id_admin"]);
     $nama_admin = htmlspecialchars($data["nama_admin"]);
     $no_telp = htmlspecialchars($data["no_telp"]);
@@ -221,17 +230,20 @@ function ubahAdmin($data) {
     ");
 }
 
-function hapusAdmin($id_admin) {
+function hapusAdmin($id_admin)
+{
     return mysqli_query(DB, "DELETE FROM tb_admin WHERE ADMIN_ID = '$id_admin'");
 }
 
 // ======================================= TABEL POLI =================================================
 
-function allPoli() {
+function allPoli()
+{
     return mysqli_query(DB, "SELECT * FROM tb_poli")->fetch_all(MYSQLI_ASSOC);
 }
 
-function tambahPoli($data) {
+function tambahPoli($data)
+{
     $id_poli = htmlspecialchars($data["id_poli"]);
     $nama_poli = htmlspecialchars($data["nama_poli"]);
     $ruangan = htmlspecialchars($data["ruangan"]);
@@ -240,6 +252,24 @@ function tambahPoli($data) {
     VALUES
     ('$id_poli', '$nama_poli', '$ruangan')
     ");
+}
+
+function ubahPoli($data)
+{
+    $id_poli = htmlspecialchars($data["id_poli"]);
+    $nama_poli = htmlspecialchars($data["nama_poli"]);
+    $ruangan = htmlspecialchars($data["ruangan"]);
+
+    return mysqli_query(DB, "UPDATE tb_poli SET
+    NAMA_POLI = '$nama_poli',
+    RUANGAN = '$ruangan'
+    WHERE ID_POLI = '$id_poli'
+");
+}
+
+function hapusPoli($id_poli)
+{
+    return mysqli_query(DB, "DELETE FROM tb_poli WHERE ID_POLI = '$id_poli'");
 }
 
 
@@ -259,3 +289,46 @@ function getDataLogin($username)
     LEFT JOIN tb_admin ON tb_user.ID_USER = tb_admin.ID_USER
     WHERE tb_user.USERNAME = '$username';")->fetch_assoc();
 }
+
+//==============================TABEL ANTRIAN ======================
+
+function getDataAntrianAndPemeriksaanByIdPasien($id_pasien)
+{
+    return mysqli_query(DB, "SELECT tb_pemeriksaan.*, tb_pasien.NAMA_PASIEN  FROM tb_pemeriksaan
+    LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
+    WHERE tb_pemeriksaan.ID_PASIEN = '$id_pasien'")->fetch_all(MYSQLI_ASSOC);
+}
+function getDataAntrianAndPemeriksaan()
+{
+    return mysqli_query(DB, "SELECT tb_pemeriksaan.*, tb_pasien.NAMA_PASIEN  FROM tb_pemeriksaan
+    LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN")->fetch_all(MYSQLI_ASSOC);
+}
+
+
+
+
+function tambahPemeriksaan($data)
+{
+    $id_pe = htmlspecialchars($data["id_pe"]);
+    $id_pasien = htmlspecialchars($data["id_pasien"]);
+    $antrian = htmlspecialchars($data["no_antrian"]);
+    $tgl_antrian = htmlspecialchars($data["tgl_reservasi"]);
+    $keluhan = htmlspecialchars($data["keluhan"]);
+    return mysqli_query(DB, "INSERT INTO tb_pemeriksaan (ID_PEMERIKSAAN, ID_PASIEN, NO_ANTRIAN, TGL_RESERVASI, KELUHAN)
+    VALUES
+    ('$id_pe', '$id_pasien', '$antrian', '$tgl_antrian', '$keluhan' )
+    ");
+}
+
+function generateNoAntrian()
+{
+    $last_no_antrian = query("SELECT MAX(NO_ANTRIAN) AS no_antrian FROM tb_pemeriksaan")[0];
+    $max_antrian = (int)$last_no_antrian["no_antrian"];
+    $next_nomor = $max_antrian + 1;
+    return $next_nomor;
+}
+
+// =========================== tabel pemeriksaan =================
+
+
+

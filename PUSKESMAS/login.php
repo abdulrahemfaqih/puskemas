@@ -9,6 +9,7 @@ if (isset($_POST['submitlogin'])) {
     if (!empty($data_pasien)) {
         if (md5($password) == $data_pasien["PASIEN_PASSWORD"]) {
             $_SESSION["login_pasien"] = true;
+            $_SESSION["id_pasien"] = $data_pasien["ID_PASIEN"];
             $_SESSION["nama_pasien"] = $data_pasien["NAMA_PASIEN"];
             $_SESSION["username_pasien"] = $data_pasien["PASIEN_USERNAME"];
             $nama = $_SESSION["nama_pasien"];
