@@ -1,31 +1,65 @@
 <?php
-
 session_start();
-
-$title = "Data Admin";
-include "layouts/header.php";
 include "../data/database.php";
+if (empty($_SESSION["login_admin"])) {
+    header("Location: login.php");
+    exit;
+}
 
 
+$nama_admin = isset($_POST["nama_admin"]) ? $_POST["nama_admin"] : '';
+
+if (isset($_POST["t_ubah"])) {
+    if (ubahAdmin($_POST)) {
+        echo "<script>
+        alert('admin $nama_admin berhasil diubah')
+        window.location.href = 'data_admin.php?tab=data_admin'
+        </script>";
+    } else {
+        echo "<script>
+        alert('admin $nama_admin gagal diubah')
+        window.location.href = 'data_admin.php?tab=data_admin'
+        </script>";
+    }
+}
+
+
+if (isset($_POST["t_tambah"])) {
+    insertUser($_POST, 1);
+    $nama_admin = $_POST["nama_admin"];
+    if (tambahAdmin($_POST)) {
+        echo "<script>
+        alert('admin $nama_admin berhasil ditambahkan')
+        window.location.href = 'data_admin.php?tab=data_admin'
+        </script>";
+    } else {
+        echo "<script>
+        alert('admin $nama gagal ditambahkan')
+        window.location.href = 'data_admin?tab=data_admin'
+        </script>";
+    }
+}
+
+if (isset($_POST["t_hapus"])) {
+    $id_admin = $_POST["id_admin"];
+    if (hapusAdmin($id_admin)) {
+        echo "<script>
+        alert('admin $nama_admin berhasil dihapus')
+        window.location.href = 'data_admin.php?tab=data_admin'
+        </script>";
+    } else {
+        echo "<script>
+        alert('admin $nama_admin gagal dihapus')
+        window.location.href = 'data_admin.php?tab=data_admin'
+        </script>";
+    }
+}
 
 $all_admin = getAllAdmin();
 
-// if (isset($_POST["t_ubah"])) {
+$title = "Data Admin";
+include "layouts/header.php";
 
-//     ubahObat($_POST);
-//     header("Location: data_obat.php");
-// }
-
-// if (isset($_POST["t_tambah"])) {
-//     tambahObat($_POST);
-//     header("Location: data_obat.php");
-// }
-
-// if (isset($_POST["t_hapus"])) {
-//     $id_obat = $_POST["id_obat"];
-//     hapusObat($id_obat);
-//     header("Location: data_obat.php");
-// }
 ?>
 
 <body class="hold-transition sidebar-mini">
@@ -44,7 +78,7 @@ $all_admin = getAllAdmin();
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Data Master Obat</h1>
+                            <h1>Data Master Admin</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -56,8 +90,8 @@ $all_admin = getAllAdmin();
                 </div><!-- /.container-fluid -->
             </section>
             <!-- modal tambah -->
-            <form action="" method="post">
-                <div class="modal fade" id="modal-default">
+            <div class="modal fade" id="modal-tambah">
+                <form action="" method="post">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -67,7 +101,7 @@ $all_admin = getAllAdmin();
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <?php $id_Aadmin = generateID("tb_obat", "id_admin", "AD"); ?>
+                                <?php $id_admin = generateID("tb_admin", "ADMIN_ID", "AD"); ?>
                                 <div class="mb-3">
                                     <label>ID ADMIN</label>
                                     <input type="text" readonly class="form-control" name="id_admin" value="<?= $id_admin ?>">
@@ -102,21 +136,22 @@ $all_admin = getAllAdmin();
                         <!-- /.modal-content -->
                     </div>
                     <!-- /.modal-dialog -->
-                </div>
-            </form>
+                </form>
+            </div>
             <!-- end modal tambah -->
+
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
-                            <button type="button" class="btn btn-default mb-2" data-toggle="modal" data-target="#modal-default">
-                                Tambah Obat
+                            <button type="button" class="btn btn-default mb-2" data-toggle="modal" data-target="#modal-tambah">
+                                Tambah Admin
                             </button>
                             <!-- /.card -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Obat</h3>
+                                    <h3 class="card-title">Admin</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
@@ -124,6 +159,7 @@ $all_admin = getAllAdmin();
                                         <thead>
                                             <tr>
                                                 <th style="width: 30px;">NO</th>
+                                                <th>USERNAME ADMIN</th>
                                                 <th>NAMA ADMIN</th>
                                                 <th>NOMOR TELEPON</th>
                                                 <th>ALAMAT ADMIN</th>
@@ -135,20 +171,21 @@ $all_admin = getAllAdmin();
                                             foreach ($all_admin as $a) : ?>
                                                 <tr>
                                                     <td><?= $no++ ?></td>
+                                                    <td><?= $a["USERNAME"] ?></td>
                                                     <td><?= $a["NAMA_ADMIN"] ?></td>
                                                     <td><?= $a["TELP_ADMIN"] ?></td>
                                                     <td><?= $a["ALAMAT_ADMIN"] ?></td>
                                                     <td>
-                                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal_edit<?= $a["ID_ADMIN"] ?>">
+                                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal_edit<?= $a["ADMIN_ID"] ?>">
                                                             Edit
                                                         </button>
-                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal_hapus<?= $a["ID_ADMIN"] ?>">
+                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal_hapus<?= $a["ADMIN_ID"] ?>">
                                                             Hapus
                                                         </button>
                                                     </td>
                                                 </tr>
-                                                <!-- modal edit obat -->
-                                                <div class="modal fade" id="modal_edit<?= $a["ID_ADMIN"] ?>">
+                                                <!-- modal edit admin -->
+                                                <div class="modal fade" id="modal_edit<?= $a["ADMIN_ID"] ?>">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <form action="" method="post">
@@ -160,7 +197,7 @@ $all_admin = getAllAdmin();
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="modal-body">
-                                                                        <input type="hidden" class="form-control" name="id_admin" value="<?= $a["ID_ADMIN"] ?>">
+                                                                        <input type="hidden" class="form-control" name="id_admin" value="<?= $a["ADMIN_ID"] ?>">
                                                                         <div class="mb-3">
                                                                             <label>NAMA ADMIN</label>
                                                                             <input type="text" class="form-control" name="nama_admin" value="<?= $a["NAMA_ADMIN"] ?>">
@@ -186,8 +223,8 @@ $all_admin = getAllAdmin();
                                                 <!-- end modal edit obat -->
 
 
-                                                <!-- modal hapus obat -->
-                                                <div class="modal fade" id="modal_hapus<?= $a["ID_OBAT"] ?>">
+                                                <!-- modal hapus admin -->
+                                                <div class="modal fade" id="modal_hapus<?= $a["ADMIN_ID"] ?>">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <form action="" method="post">
@@ -198,8 +235,8 @@ $all_admin = getAllAdmin();
                                                                     </button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <input type="hidden" name="id_admin" value="<?= $a["ID_ADMIN"] ?>">
-                                                                    <p><?= $a["NAMA_OBAT"] ?></p>
+                                                                    <input type="hidden" name="id_admin" value="<?= $a["ADMIN_ID"] ?>">
+                                                                    <input type="text" readonly class="form-control" name="nama_admin" value="<?= $a["NAMA_ADMIN"] ?>">
                                                                 </div>
                                                                 <div class="modal-footer justify-content-between">
                                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -215,6 +252,7 @@ $all_admin = getAllAdmin();
                                         <tfoot>
                                             <tr>
                                                 <th>NO</th>
+                                                <th>USERNAME ADMIN</th>
                                                 <th>NAMA ADMIN</th>
                                                 <th>NOMOR TELEPON</th>
                                                 <th>ALAMAT</th>

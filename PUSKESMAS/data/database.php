@@ -110,11 +110,10 @@ function getAllDataDokter()
     return mysqli_query(DB, "SELECT `ID_DOKTER`, `NAMA_DOKTER`, `SPESIALIS`, `JENIS_KELAMIN_DOKTER`, `ALAMAT_DOKTER`, `TELP_DOKTER` FROM `tb_dokter`")->fetch_all(MYSQLI_ASSOC);
 }
 
-function insertUser($data)
+function insertUser($data, $level)
 {
     $username = htmlspecialchars($data["username"]);
     $password = htmlspecialchars(md5($data["password"]));
-    $level = 2;
 
     return mysqli_query(DB, "INSERT INTO tb_user (USERNAME, PASSWORD, LEVEL) VALUES ('$username', '$password', '$level')");
 }
@@ -126,7 +125,6 @@ function InsertDataDokter($data)
     $id_user = mysqli_insert_id(DB);
 
 
-    // Extract dokter-related data from $data
     $id_dokter = htmlspecialchars($data['id_dokter']);
     $nama_dokter = htmlspecialchars($data['nama_dokter']);
     $spesialis = htmlspecialchars($data['spesialis']);
@@ -160,7 +158,6 @@ function deleteDokter($data)
     $id_dokter = $data['id_dokter'];
     $success = true;
 
-    // Retrieve the associated user ID from tb_dokter
     $query_user_id = "SELECT ID_USER FROM tb_dokter WHERE ID_DOKTER = '$id_dokter'";
     $result_user_id = mysqli_query(DB, $query_user_id);
 
@@ -191,15 +188,59 @@ function deleteDokter($data)
 
 
 function getAllAdmin() {
-    return mysqli_query(DB, "SELECT * FROM tb_admin")->fetch_all(MYSQLI_ASSOC);
+    return mysqli_query(DB, "SELECT tb_admin.*, tb_user.USERNAME
+    FROM tb_admin
+    LEFT JOIN tb_user ON tb_admin.ID_USER = tb_user.ID_USER
+    ")->fetch_all(MYSQLI_ASSOC);
 }
 
-// function tambahAdmin($data) {
-//     return mysqli_query(DB, "INSERT INTO tb_admin (ID_ADMIN, ")
-// }
+function tambahAdmin($data) {
+    $id_user = mysqli_insert_id(DB);
+    $id_admin = htmlspecialchars($data["id_admin"]);
+    $nama_admin = htmlspecialchars($data["nama_admin"]);
+    $no_telp = htmlspecialchars($data["no_telp"]);
+    $alamat = htmlspecialchars($data["alamat"]);
+
+    return mysqli_query(DB, "INSERT INTO tb_admin (ADMIN_ID, ID_USER, NAMA_ADMIN, TELP_ADMIN, ALAMAT_ADMIN)
+    VALUES
+    ('$id_admin', '$id_user', '$nama_admin', '$no_telp', '$alamat')
+    ");
+}
+
+function ubahAdmin($data) {
+    $id_admin = htmlspecialchars($data["id_admin"]);
+    $nama_admin = htmlspecialchars($data["nama_admin"]);
+    $no_telp = htmlspecialchars($data["no_telp"]);
+    $alamat = htmlspecialchars($data["alamat"]);
+
+    return mysqli_query(DB, "UPDATE tb_admin SET
+    NAMA_ADMIN = '$nama_admin',
+    TELP_ADMIN = '$no_telp',
+    ALAMAT_ADMIN = '$alamat'
+    WHERE ADMIN_ID = '$id_admin'
+    ");
+}
+
+function hapusAdmin($id_admin) {
+    return mysqli_query(DB, "DELETE FROM tb_admin WHERE ADMIN_ID = '$id_admin'");
+}
 
 // ======================================= TABEL POLI =================================================
 
+function allPoli() {
+    return mysqli_query(DB, "SELECT * FROM tb_poli")->fetch_all(MYSQLI_ASSOC);
+}
+
+function tambahPoli($data) {
+    $id_poli = htmlspecialchars($data["id_poli"]);
+    $nama_poli = htmlspecialchars($data["nama_poli"]);
+    $ruangan = htmlspecialchars($data["ruangan"]);
+
+    return mysqli_query(DB, "INSERT INTO tb_poli (ID_POLI, NAMA_POLI, RUANGAN)
+    VALUES
+    ('$id_poli', '$nama_poli', '$ruangan')
+    ");
+}
 
 
 // ============================================== LOGIN =================================================

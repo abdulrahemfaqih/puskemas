@@ -1,9 +1,10 @@
 <?php
+session_start();
 $title = "Data Obat";
 include "layouts/header.php";
 include "../data/database.php";
 
-if (!isset($_SESSION["login_admin"])) {
+if (empty($_SESSION["login_admin"])) {
     header("Location: index.php");
     exit;
 }

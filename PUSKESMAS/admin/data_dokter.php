@@ -10,7 +10,7 @@ $allDokter = getAllDataDokter();
 // var_dump($allDokter);
 
 if (isset($_POST['t_tambah'])) {
-    if (insertUser($_POST)) {
+    if (insertUser($_POST,2)) {
         InsertDataDokter($_POST);
     }
     header("Location: data_dokter.php");

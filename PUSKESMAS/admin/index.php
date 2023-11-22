@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["login_admin"])) {
+if (empty($_SESSION["login_admin"])) {
     header("location: login.php");
     exit;
 }
@@ -20,7 +20,6 @@ include "layouts/header.php"
         <!-- Main Sidebar Container -->
         <?php include "layouts/sidebar.php" ?>
         <!-- end main sidebar kontainer -->
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->

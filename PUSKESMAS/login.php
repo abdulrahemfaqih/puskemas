@@ -3,9 +3,9 @@
 session_start();
 if (isset($_POST['submitlogin'])) {
     $password = $_POST["password"];
-    $userame = $_POST["username"];
+    $username = $_POST["username"];
 
-    $data_pasien = getDataPasien($userame);
+    $data_pasien = getDataPasien($username);
     if (!empty($data_pasien)) {
         if (md5($password) == $data_pasien["PASIEN_PASSWORD"]) {
             $_SESSION["login_pasien"] = true;

@@ -1,3 +1,6 @@
+<?php
+$current_tab = isset($_GET["tab"]) ? $_GET["tab"] : '';
+?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
@@ -27,7 +30,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="index.php" class="nav-link">
+                    <a href="index.php?tab=dashboard" class="nav-link <?= $current_tab == 'dashboard' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-chart-line"></i>
                         <p>
                             Dashboard
@@ -35,7 +38,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="antrian.php" class="nav-link">
+                    <a href="antrian.php?tab=antrian" class="nav-link <?= $current_tab == 'antrian' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-columns"></i>
                         <p>
                             Antrian
@@ -43,7 +46,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="transaksi.php" class="nav-link">
+                    <a href="transaksi.php?tab?transaksi" class="nav-link <?= $current_tab == 'transaksi' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-cash-register"></i>
                         <p>
                             Transaksi
@@ -51,7 +54,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="pemeriksaan.php" class="nav-link">
+                    <a href="pemeriksaan.php?tab=pemeriksaan" class="nav-link <?= $current_tab == 'pemeriksaan' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-stethoscope"></i>
                         <p>
                             Pemeriksaan
@@ -59,7 +62,7 @@
                     </a>
                 </li>
                 <?php if ($_SESSION["level_admin"] == 1) : ?>
-                    <li class="nav-item menu-is-opening">
+                    <li class="nav-item <?= ($current_tab == 'data_admin' || $current_tab == 'data_dokter' || $current_tab == 'data_poli' || $current_tab == 'data_obat') ? 'menu-open' : ''; ?>">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
@@ -69,61 +72,61 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="data_admin.php" class="nav-link">
+                                <a href="data_admin.php?tab=data_admin" class="nav-link <?= $current_tab == 'data_admin' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Admin</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="data_antrian.php" class="nav-link">
+                                <a href="data_antrian.php?tab=data_antrian" class="nav-link <?= $current_tab == 'data_antrian' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Antrian</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="data_transaksi.php" class="nav-link">
+                                <a href="data_transaksi.php?tab=data_transaksi" class="nav-link <?= $current_tab == 'data_transaksi' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Transaksi</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="data_berita.php" class="nav-link">
+                                <a href="data_berita.php?tab=data_berita" class="nav-link <?= $current_tab == 'data_berita' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Berita</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="data_dokter.php" class="nav-link">
+                                <a href="data_dokter.php?tab=data_dokter" class="nav-link <?= $current_tab == 'data_dokter' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Dokter</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="data_pemeriksaan.php" class="nav-link">
+                                <a href="data_pemeriksaan.php?tab=data_pemeriksaan" class="nav-link <?= $current_tab == 'data_pemeriksaan' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Pemeriksaan</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="data_pasien.php" class="nav-link">
+                                <a href="data_pasien.php?tab=data_pasien" class="nav-link <?= $current_tab == 'data_pasien' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Pasien</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="data_obat.php" class="nav-link">
+                                <a href="data_obat.php?tab=data_obat" class="nav-link <?= $current_tab == 'data_obat' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Obat</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="data_poli.php" class="nav-link">
+                                <a href="data_poli.php?tab=data_poli" class="nav-link <?= $current_tab == 'data_poli' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Poli</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="data_rekammedis" class="nav-link">
+                                <a href="data_rekammedis.php?tab=data_rm" class="nav-link <?= $current_tab == 'data_rm' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Rekam Medis</p>
                                 </a>
@@ -132,7 +135,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="laporan.php" class="nav-link">
+                        <a href="laporan.php?tab=laporan" class="nav-link <?= $current_tab == 'laporan' ? 'active' : '' ?>">
                             <i class="nav-icon fas fa-calendar"></i>
                             <p>
                                 Laporan
@@ -142,7 +145,7 @@
                 <?php endif; ?>
                 <?php if (isset($_SESSION["login_admin"])) : ?>
                     <li class="nav-item">
-                        <a href="logout.php" class="nav-link">
+                        <a href="logout.php" onclick="return confirm('yakin ingin logout?')" class="nav-link">
                             <i class="fa-solid fa-right-from-bracket"></i>
                             <p>
                                 Logout

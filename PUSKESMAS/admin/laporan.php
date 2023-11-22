@@ -1,4 +1,11 @@
 <?php
+session_start();
+if(empty($_SESSION["login_admin"])) {
+    header("Location: login.php");
+    exit;
+}
+
+
 $title = "Laporan";
 include "layouts/header.php";
 ?>

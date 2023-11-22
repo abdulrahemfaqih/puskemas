@@ -19,11 +19,9 @@
                     <li class="nav-item mr-3">
                         <a class="nav-link" href="#about">Layanan Puskesmas</a>
                     </li>
-                    <?php if (isset($_SESSION["login_pasien"])) : ?>
-                        <li class="nav-item mr-3">
-                            <a class="nav-link" href="reservasi.php">Reservasi</a>
-                        </li>
-                    <?php endif ?>
+                    <li class="nav-item mr-3">
+                        <a class="nav-link" href="reservasi.php">Reservasi</a>
+                    </li>
                     <li class="nav-item mr-3">
                         <a class="nav-link" href="#doctors">Daftar Dokter</a>
                     </li>

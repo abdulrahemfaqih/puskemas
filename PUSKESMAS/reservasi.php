@@ -2,9 +2,13 @@
 include "data/database.php";
 session_start();
 
-if (!isset($_SESSION["login_pasien"])) {
-    header("Location: login.php");
-    exit();
+if (empty($_SESSION["login_pasien"])) {
+    echo "<script>
+        alert('login terlebih dahulu');
+        window.location.href = 'index.php'
+    </script>";
+
+
 }
 
 
