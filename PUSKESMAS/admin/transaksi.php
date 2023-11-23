@@ -5,12 +5,10 @@ session_start();
 $title = "Pemeriksaan";
 include "layouts/header.php";
 
-if ($_SESSION["id_dokter"] != NULL) {
-    $id_dokter = $_SESSION["id_dokter"];
-}
+
 
 // var_dump($_SESSION);
-$data_pemeriksaan = getDataAntrianAndPemeriksaanWhereIdDokter($id_dokter);
+$getDataTransaksi = getDataTransaksiPemeriksaan();
 ?>
 
 <body class="hold-transition sidebar-mini">
@@ -66,13 +64,13 @@ $data_pemeriksaan = getDataAntrianAndPemeriksaanWhereIdDokter($id_dokter);
                                             foreach ($data_pemeriksaan as $d) : ?>
                                                 <tr>
                                                     <td>
-                                                        <?php if ($d["STATUS"] == 1) : ?>
+                                                        <?php if ($d["STATUS_PEMBAYARAN"] == 1) : ?>
                                                             <a class="btn btn-success btn-sm">
-                                                                Pemeriksaan Selesai
+                                                                Pembayaran Selesai
                                                             </a>
                                                         <?php else : ?>
                                                             <a class="btn btn-warning btn-sm" href="hasil_pemeriksaan.php?id_pemeriksaan=<?= $d["ID_PEMERIKSAAN"] ?>">
-                                                                Periksa
+                                                                Pembayaran
                                                             </a>
                                                         <?php endif; ?>
                                                     </td>

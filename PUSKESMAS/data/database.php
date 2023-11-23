@@ -390,7 +390,7 @@ function hasilPemeriksaan($data) {
 
 // =========================== TABEL TRANSAKSI ============================
 
-function tambahTransaksi($data, $id_ps, $id_pe, $id_do, $id_tr)
+function tambahTransaksi($id_tr, $id_pe, $id_ps, $id_do)
 {
     $id_transaksi = $id_tr;
     $id_pemeriksaan = $id_pe;
@@ -399,13 +399,19 @@ function tambahTransaksi($data, $id_ps, $id_pe, $id_do, $id_tr)
     $id_dokter = $id_do;
     $status = 0;
 
-    return mysqli_query(DB, "INSERT INTO tb_transaksi_pemeriksaan (ID_TRANSAKSI, ID_PEMERIKSAAN, TANGGAL_TRANSAKSI, STATUS_PEMBAYARAN, ID_PASIEN, ID_DOKTER)
+    return mysqli_query(DB, "INSERT INTO tb_transaksi_pemeriksaan (ID_TRANSAKSI, ID_PEMERIKSAAN, TGL_TRANSAKSI, JUMLAH_PEMBAYARAN, STATUS_PEMBAYARAN, ID_PASIEN, ID_DOKTER)
     VALUES
-    ('$id_transaksi', '$id_pemeriksaan', '$tanggal_transaksi', 'p$id_dokter', '$id_pemeriksaan')
+    ('$id_transaksi', '$id_pemeriksaan', '$tanggal_transaksi',0 , '$status', '$id_pasien', '$id_dokter')
     ");
 }
 
 
-function getDataTransaksi() {
-    return mysqli_query(DB, "SELECT tb_transaksi.*, tb_pemeriksaan.")->fetch_all(MYSQLI_ASSOC);
+
+
+function getDataTransaksiPemeriksaan() {
+    return mysqli_query(DB, "SELECT tb_transaksi_pemeriksaan.*, tb_pasien.NAMA_PASIEN, tb_dokter.NAMA_DOKTER
+    FROM tb_transaksi_pemeriksaan
+    LEFT JOIN tb_pasien ON tb_transaksi_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
+    LEFT JOIN tb_dokter ON tb_transaksi_pemeriksaan.ID_DOKTER = tb_dokter.ID_DOKTER
+    ")->fetch_all(MYSQLI_ASSOC);
 }
