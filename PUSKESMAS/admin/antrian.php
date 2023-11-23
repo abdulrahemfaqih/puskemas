@@ -6,8 +6,7 @@ if (empty($_SESSION["login_admin"])) {
     exit;
 }
 
-$data_antrian = getDataAntrianAndPemeriksaan();
-
+$data_antrian = getDataAntrianAndPemeriksaanWhereDokterNull();
 
 if (isset($_GET["hapus_id"])) {
     $id = $_GET["hapus_id"];
@@ -67,13 +66,13 @@ include "layouts/header.php";
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th style="width: 170px;">AKSI</th>
+                                                <th style="width: 220px;">AKSI</th>
                                                 <th style="width: 30px;">NO</th>
                                                 <th>ID ANTRIAN </th>
                                                 <th>TANGGAL ANTRIAN</th>
                                                 <th>ID PASIEN</th>
                                                 <th>NAMA PASIEN </th>
-                                                <th>NOMOR ANTRIAN</th>
+                                                <th style="width: 100px;">NOMOR ANTRIAN</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -85,7 +84,7 @@ include "layouts/header.php";
                                                             Batal
                                                         </a>
 
-                                                        <a class="btn btn-success btn-sm" href="proses_reservasi.php?tab=antrian">
+                                                        <a class="btn btn-success btn-sm" href="proses_reservasi.php?tab=antrian&id_pemeriksaan=<?= $d["ID_PEMERIKSAAN"] ?>">
                                                             Proses Pemeriksaan
                                                         </a>
                                                     </td>
@@ -95,7 +94,6 @@ include "layouts/header.php";
                                                     <td><?= $d["ID_PASIEN"] ?></td>
                                                     <td><?= $d["NAMA_PASIEN"] ?></td>
                                                     <td><?= $d["NO_ANTRIAN"] ?></td>
-
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>
@@ -111,6 +109,7 @@ include "layouts/header.php";
                                             </tr>
                                         </tfoot>
                                     </table>
+
                                 </div>
                                 <!-- /.card-body -->
                             </div>

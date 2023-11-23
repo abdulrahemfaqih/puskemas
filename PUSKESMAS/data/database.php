@@ -1,6 +1,6 @@
 <?php
 
-define("DB", mysqli_connect("localhost", "root", "", "puskesmas"));
+define("DB", mysqli_connect("localhost", "root", "", "puskesmas1"));
 
 function query($query)
 {
@@ -283,7 +283,7 @@ function getUsername($username)
 
 function getDataLogin($username)
 {
-    return mysqli_query(DB, "SELECT tb_user.*, tb_dokter.ID_USER AS ID_DOKTER_USER, tb_dokter.*, tb_admin.ID_USER AS ID_ADMIN_USER, tb_admin.*
+    return mysqli_query(DB, "SELECT tb_user.*, tb_dokter.ID_USER AS ID_DOKTER_USER, tb_dokter.*,  tb_admin.ID_USER AS ID_ADMIN_USER, tb_admin.*
     FROM tb_user
     LEFT JOIN tb_dokter ON tb_user.ID_USER = tb_dokter.ID_USER
     LEFT JOIN tb_admin ON tb_user.ID_USER = tb_admin.ID_USER
@@ -298,10 +298,27 @@ function getDataAntrianAndPemeriksaanByIdPasien($id_pasien)
     LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
     WHERE tb_pemeriksaan.ID_PASIEN = '$id_pasien'")->fetch_all(MYSQLI_ASSOC);
 }
-function getDataAntrianAndPemeriksaan()
+function getDataAntrianAndPemeriksaanWhereDokterNull()
+{
+    return mysqli_query(DB, "SELECT tb_pemeriksaan.*, tb_pasien.NAMA_PASIEN
+    FROM tb_pemeriksaan
+    LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
+    WHERE tb_pemeriksaan.ID_DOKTER IS NULL")
+    ->fetch_all(MYSQLI_ASSOC);
+}
+function getDataAntrianAndPemeriksaanWhereIdDokter($id_dokter)
+{
+    return mysqli_query(DB, "SELECT tb_pemeriksaan.*, tb_pasien.NAMA_PASIEN
+    FROM tb_pemeriksaan
+    LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
+    WHERE ID_DOKTER = '$id_dokter'")
+    ->fetch_all(MYSQLI_ASSOC);
+}
+function getDataAntrianAndPemeriksaanByIdPem($id_pemeriksaan)
 {
     return mysqli_query(DB, "SELECT tb_pemeriksaan.*, tb_pasien.NAMA_PASIEN  FROM tb_pemeriksaan
-    LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN")->fetch_all(MYSQLI_ASSOC);
+    LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
+    WHERE ID_PEMERIKSAAN = '$id_pemeriksaan'")->fetch_all(MYSQLI_ASSOC)[0];
 }
 
 function hapusPemeriksan($id_pemeriksaan) {
@@ -325,13 +342,70 @@ function tambahPemeriksaan($data)
 
 function generateNoAntrian()
 {
-    $last_no_antrian = query("SELECT MAX(NO_ANTRIAN) AS no_antrian FROM tb_pemeriksaan")[0];
-    $max_antrian = (int)$last_no_antrian["no_antrian"];
+    $last_no_antrian = query("SELECT TGL_RESERVASI,  MAX(NO_ANTRIAN) AS no_antrian FROM tb_pemeriksaan")[0];
+
+    if ($last_no_antrian) {
+        $last_date = strtotime($last_no_antrian["TGL_RESERVASI"]);
+        $current_date = strtotime(date("Y-m-d"));
+        if ($current_date == $last_date) {
+            $max_antrian = (int)$last_no_antrian["no_antrian"];
+        } else {
+            $max_antrian = 0;
+        }
+    }
     $next_nomor = $max_antrian + 1;
     return $next_nomor;
 }
 
-// =========================== tabel pemeriksaan =================
+function updatePemeriksaanById($data) {
+    $id_pemeriksaan = $data["id_pemeriksaan"];
+    $tanggal = $data["tanggal"];
+    $dokter = $data["dokter"];
+
+    return mysqli_query(DB, "UPDATE tb_pemeriksaan SET
+    TGL_PERIKSA = '$tanggal',
+    ID_DOKTER  = '$dokter'
+    WHERE ID_PEMERIKSAAN = '$id_pemeriksaan'
+    ");
+}
+
+function hasilPemeriksaan($data) {
+    $id_pemeriksaan = $data["id_pemeriksaan"];
+    $poli = $data["poli"];
+    $diagnosa = $data["diagnosa"];
+    $hasil_pemeriksaan = $data["hasil_pemeriksaan"];
+    $tindakan = $data["tindakan"];
+    $status = 1;
+
+    return mysqli_query(DB, "UPDATE tb_pemeriksaan SET
+    ID_POLI = '$poli',
+    DIAGNOSA = '$diagnosa',
+    HASIL_PEMERIKSAAN = '$hasil_pemeriksaan',
+    TINDAKAN = '$tindakan',
+    `STATUS` = '$status'
+    WHERE ID_PEMERIKSAAN = '$id_pemeriksaan'
+    ");
+
+}
+
+// =========================== TABEL TRANSAKSI ============================
+
+function tambahTransaksi($data, $id_ps, $id_pe, $id_do, $id_tr)
+{
+    $id_transaksi = $id_tr;
+    $id_pemeriksaan = $id_pe;
+    $tanggal_transaksi = date("Y-m-d");
+    $id_pasien = $id_ps;
+    $id_dokter = $id_do;
+    $status = 0;
+
+    return mysqli_query(DB, "INSERT INTO tb_transaksi_pemeriksaan (ID_TRANSAKSI, ID_PEMERIKSAAN, TANGGAL_TRANSAKSI, STATUS_PEMBAYARAN, ID_PASIEN, ID_DOKTER)
+    VALUES
+    ('$id_transaksi', '$id_pemeriksaan', '$tanggal_transaksi', 'p$id_dokter', '$id_pemeriksaan')
+    ");
+}
 
 
-
+function getDataTransaksi() {
+    return mysqli_query(DB, "SELECT tb_transaksi.*, tb_pemeriksaan.")->fetch_all(MYSQLI_ASSOC);
+}

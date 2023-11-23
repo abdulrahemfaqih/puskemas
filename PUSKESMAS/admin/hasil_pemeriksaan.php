@@ -1,36 +1,39 @@
 <?php
 session_start();
 include "../data/database.php";
-if (empty($_SESSION["login_admin"])) {
-    header("Location: login.php");
-    exit;
-}
-
 if (isset($_GET["id_pemeriksaan"])) {
     $id_pemeriksaan = $_GET["id_pemeriksaan"];
     $data_id_pemeriksaan = getDataAntrianAndPemeriksaanByIdPem($id_pemeriksaan);
 }
 
-if (isset($_POST["proses"])) {
+$id_paaien = $data_id_pemeriksaan["ID_PASIEN"];
+$id_dokter = $data_id_pemeriksaan["ID_DOKTER"];
 
-    if (updatePemeriksaanById($_POST)) {
-        $id_pemeriksaan = $_POST["id_pemeriksaan"];
+
+if (isset($_POST["proses"])) {
+    $id_pemeriksaan = $_POST["id_pemeriksaan"];
+    $id_transaksi = $_POST["id_transaksi"];
+    if (hasilPemeriksaan($_POST) && tambahTransaksi($id_transaksi, $id_transaksi, $id_paaien, $id_pemeriksaan, $id_dokter)) {
         echo "<script>
-        alert('id pemerikaan $id_pemeriksaan berhasil diproses')
-        window.location.href = 'antrian.php?tab=antrian'
-        </script>";
+        alert('pemeriksaan $id_pemeriksaan telah selesai ')
+        window.location.href = 'pemeriksaan.php?tab=pemeriksaan'
+        </script>
+        ";
     } else {
         echo "<script>
-        alert('id pemerikaan $id_pemeriksaan gagal diproses')
-        window.location.href = 'antrian.php?tab=antrian'
-        </script>";
+        alert('pemeriksaan $id_pemeriksaan gagal di proses')
+        window.location.href = 'pemeriksaan.php?tab=pemeriksaan'
+        </script>
+        ";
     }
+
 }
 
 
-$all_dokter = getAllDataDokter();
+$all_poli = allPoli();
 
 
+$id_dokter = $_SESSION["id_dokter"];
 $title = "Proses Reservasi";
 include "layouts/header.php";
 
@@ -52,7 +55,7 @@ include "layouts/header.php";
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Proses Reservasi</h1>
+                            <h1>Proses Pemeriksaan</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -71,14 +74,17 @@ include "layouts/header.php";
                             <!-- /.card -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Proses Reservasi</h3>
+                                    <h3 class="card-title">Pemeriksaan</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <form action="" method="post">
                                     <div class="card-body">
                                         <div class="table table-responsive">
                                             <table class="table table-bordered">
-
+                                                <?php
+                                                $id_transaksi = generateID("tb_transaksi_pemeriksaan", "ID_TRANSAKSI", "TP");
+                                                ?>
+                                                <input type="hidden" name="id_transaksi" value="<?= $id_transaksi ?>">
                                                 <input type="hidden" name="id_pemeriksaan" value="<?= $id_pemeriksaan ?>">
                                                 <tr>
                                                     <th style="width: 300px;">ID PEMERIKSAAN</th>
@@ -101,12 +107,7 @@ include "layouts/header.php";
                                                     <th>DOKTER</th>
                                                     <td>
                                                         <div class="form-group">
-                                                            <select name="dokter" required class="form-control select2" style="width: 25%">
-                                                                <option selected disabled="">PILIH DOKTER</option>
-                                                                <?php foreach ($all_dokter as $dokter) : ?>
-                                                                    <option value="<?= $dokter["ID_DOKTER"] ?>"><?= $dokter["ID_DOKTER"] ?> | <?= $dokter["NAMA_DOKTER"] ?></option>
-                                                                <?php endforeach; ?>
-                                                            </select>
+                                                            <?= $nama ?>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -116,28 +117,61 @@ include "layouts/header.php";
                                                         <textarea class="form-control" rows="3"><?= $data_id_pemeriksaan["KELUHAN"] ?></textarea>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <th>
+                                                        POLI
+                                                    </th>
+                                                    <td>
+                                                        <div class="form-group">
+                                                            <select name="poli" required class="form-control select2" style="width: 25%">
+                                                                <option selected disabled="">PILIH POLI</option>
+                                                                <?php foreach ($all_poli as $p) : ?>
+                                                                    <option value="<?= $p["ID_POLI"] ?>"><?= $p["ID_POLI"] ?> | <?= $p["NAMA_POLI"] ?></option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>DIAGNOSA</th>
+                                                    <td>
+                                                        <textarea class="form-control" name="diagnosa" rows="3"></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>HASIL PEMERIKSAAN</th>
+                                                    <td>
+                                                        <textarea class="form-control" name="hasil_pemeriksaan" rows="3"></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>TINDAKAN PEMERIKSAAN</th>
+                                                    <td>
+                                                        <textarea class="form-control" name="tindakan" rows="3"></textarea>
+                                                    </td>
+                                                </tr>
                                             </table>
                                         </div>
                                         <div class="d-flex justify-content-center">
                                             <a href="antrian.php?tab=antrian" class="btn btn-warning btn-sm mx-2">Kembali</a>
                                             <button type="submit" name="proses" class="btn btn-success btn-sm">Proses</button>
                                         </div>
+                                    </div>
                                 </form>
+                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card-body -->
+                            <!-- /.card -->
                         </div>
-                        <!-- /.card -->
+                        <!-- /.col -->
                     </div>
-                    <!-- /.col -->
+                    <!-- /.row -->
                 </div>
-                <!-- /.row -->
+                <!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
         </div>
-        <!-- /.container-fluid -->
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
-    <?php include "layouts/footer.php" ?>
+        <!-- /.content-wrapper -->
+        <?php include "layouts/footer.php" ?>
 
     </div>
     <!-- ./wrapper -->

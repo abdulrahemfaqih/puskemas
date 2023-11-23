@@ -37,6 +37,7 @@ $current_tab = isset($_GET["tab"]) ? $_GET["tab"] : '';
                         </p>
                     </a>
                 </li>
+                <?php if($_SESSION["level_admin"] == 1) : ?>
                 <li class="nav-item">
                     <a href="antrian.php?tab=antrian" class="nav-link <?= $current_tab == 'antrian' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-columns"></i>
@@ -53,7 +54,8 @@ $current_tab = isset($_GET["tab"]) ? $_GET["tab"] : '';
                         </p>
                     </a>
                 </li>
-                <?php if($_SESSION == 2) : ?>
+                <?php endif ?>
+                <?php if($_SESSION["level_admin"] == 2) : ?>
                 <li class="nav-item">
                     <a href="pemeriksaan.php?tab=pemeriksaan" class="nav-link <?= $current_tab == 'pemeriksaan' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-stethoscope"></i>
@@ -146,9 +148,9 @@ $current_tab = isset($_GET["tab"]) ? $_GET["tab"] : '';
                     </li>
                 <?php endif; ?>
                 <?php if (isset($_SESSION["login_admin"])) : ?>
-                    <li class="nav-item">
+                    <li class="nav-item ">
                         <a href="logout.php" onclick="return confirm('yakin ingin logout?')" class="nav-link">
-                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <i class="nav-icon fa-solid fa-right-from-bracket" style="color: #ff0000;"></i>
                             <p>
                                 Logout
                             </p>

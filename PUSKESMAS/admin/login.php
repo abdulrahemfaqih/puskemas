@@ -14,6 +14,7 @@ if (isset($_POST["login"])) {
     $nama = isset($data_user["NAMA_ADMIN"]) ? $data_user["NAMA_ADMIN"] : $data_user["NAMA_DOKTER"];
 
 
+
     if (!empty($user)) {
         if ((md5($password)) == $user["PASSWORD"]) {
             $_SESSION["id_user_admin"] = $user["ID_USER"];
@@ -21,6 +22,10 @@ if (isset($_POST["login"])) {
             $_SESSION["username_admin"] = $user["USERNAME"];
             $_SESSION["login_admin"] = true;
             $_SESSION["nama_admin"] = $nama;
+            $_SESSION["id_dokter"] = $data_user["ID_DOKTER"];
+            $_SESSION["nama_dokter"] = $data_user["NAMA_DOKTER"];
+            // var_dump($_SESSION);
+            // exit;
             echo "<script>
             alert('login sukses, Selamat Datang $nama ')
             window.location.href = 'index.php';

@@ -20,8 +20,50 @@
 <!-- AdminLTE App -->
 <script src="../assets/dist/js/adminlte.min.js"></script>
 
-<!-- Page specific script -->
+
+
+<script src="../assets/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- CodeMirror -->
+<script src="../assets/plugins/codemirror/codemirror.js"></script>
+<script src="../assets/plugins/codemirror/mode/css/css.js"></script>
+<script src="../assets/plugins/codemirror/mode/xml/xml.js"></script>
+<script src="../assets/plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+
+<!-- Select2 -->
+<script src="../assets/plugins/select2/js/select2.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+
 <script>
+    $(document).ready(function() {
+
+        $("#obat").select2({
+
+            placeholder: "PILIH OBAT"
+
+        });
+
+    });
+
+    $(function() {
+        // Summernote
+        $('#summernote').summernote()
+
+        // CodeMirror
+        CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
+            mode: "htmlmixed",
+            theme: "monokai"
+        });
+        $(".select2").select2();
+
+        //Initialize Select2 Elements
+        $(".select2bs4").select2({
+            theme: "bootstrap4",
+        });
+
+
+    })
+
     $(function() {
         $("#example1").DataTable({
             "responsive": true,
