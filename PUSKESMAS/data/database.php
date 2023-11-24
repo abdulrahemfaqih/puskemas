@@ -320,10 +320,13 @@ function getDataAntrianAndPemeriksaanWhereDokterNull()
 }
 function getDataAntrianAndPemeriksaanWhereIdDokter($id_dokter)
 {
+
+
+    $tanggal = date("Y-m-d");
     return mysqli_query(DB, "SELECT tb_pemeriksaan.*, tb_pasien.NAMA_PASIEN
     FROM tb_pemeriksaan
     LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
-    WHERE ID_DOKTER = '$id_dokter'")
+    WHERE ID_DOKTER = '$id_dokter' AND TGL_PERIKSA = '$tanggal' ")
         ->fetch_all(MYSQLI_ASSOC);
 }
 function getDataAntrianAndPemeriksaanByIdPem($id_pemeriksaan)
@@ -522,5 +525,54 @@ function hapusApoteker($id_apoteker)
     return mysqli_query(DB, "DELETE FROM tb_apoteker WHERE ID_APOTEKER = '$id_apoteker'");
 }
 
+// ====================================== TABEL TRANSAKSI OBAT ================
 
-// function deleteUsername($)
+function getDataTransaksiObat()
+{
+    return mysqli_query(DB, "SELECT * FROM tb_transaksi_obat")->fetch_all(MYSQLI_ASSOC);
+}
+
+function getDataTransaksiObatByTanggal()
+{
+    $tanggal = date("Y-m-d");
+    return mysqli_query(DB, "SELECT * FROM tb_transaksi_obat WHERE tanggal_transaksi = '$tanggal'")->fetch_all(MYSQLI_ASSOC);
+}
+function tambahTransaksiObat($data)
+{
+    $id_transaksi = $data["id_transaksi"];
+    $pembeli = $data["pembeli"];
+    $apoteker = $data["id_apoteker"];
+    $tanggal = $data["tanggal_transaksi"];
+    $total = 0;
+
+    mysqli_query(DB, "INSERT INTO tb_transaksi_obat (id_transaksi, pembeli, ID_APOTEKER, tanggal_transaksi, total_bayar)
+    VALUES
+    ('$id_transaksi', '$pembeli', '$apoteker', '$tanggal', '$total')");
+
+
+
+    foreach ($data["obat"] as $obat) {
+
+        $data_obat = query("SELECT HARGA_OBAT FROM tb_obat WHERE ID_OBAT = '$obat'")[0];
+        $harga = $data_obat["HARGA_OBAT"];
+
+        mysqli_query(DB, "INSERT INTO detail_transaksi_obat (id_transaksi, id_obat, harga)
+        VALUES
+        ('$id_transaksi', '$obat', '$harga')");
+
+        $total_bayar = query("SELECT SUM(harga) AS total FROM detail_transaksi_obat WHERE id_transaksi = '$id_transaksi'")[0];
+        $total = $total_bayar["total"];
+
+        mysqli_query(DB, "UPDATE tb_transaksi_obat SET total_bayar = '$total' WHERE id_transaksi = '$id_transaksi'");
+    }
+}
+
+
+// =============================== TABEL PASIEN =====================================
+
+function getAllPasien()
+{
+    return mysqli_query(DB, "SELECT * FROM tb_pasien")->fetch_all(MYSQLI_ASSOC);
+}
+
+

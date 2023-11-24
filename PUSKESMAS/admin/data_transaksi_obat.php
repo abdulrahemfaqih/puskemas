@@ -39,7 +39,7 @@ if (isset($_POST["t_hapus"])) {
     }
 }
 
-$all_transaksi = getDataTransaksiObatByTanggal();
+$all_transaksi = getDataTransaksiObat();
 $all_obat = getAllObat();
 
 $title = "Transaksi Obat";
@@ -74,63 +74,11 @@ include "layouts/header.php";
                     </div>
                 </div><!-- /.container-fluid -->
             </section>
-            <!-- modal tambah -->
-            <div class="modal fade" id="modal-tambah">
-                <form action="" method="post">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Form Tambah Transaksi</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="hidden" name="id_apoteker" value="<?= $id_apoteker ?>">
-                                <?php $id_transaksi = generateID("tb_transaksi_obat", "id_transaksi", "TO"); ?>
-                                <div class="mb-3">
-                                    <label>ID Transaksi</label>
-                                    <input type="text" readonly class="form-control" name="id_transaksi" value="<?= $id_transaksi ?>">
-                                </div>
-                                <div class="mb-3 form-group">
-                                    <label for="obat">OBAT</label><br>
-                                    <select id="obat" name="obat[]" class="form-control" multiple="multiple" style="width: 400px;">
-                                        <option value="">PILIH OBAT</option>
-                                        <?php foreach ($all_obat as $o) : ?>
-                                            <option value="<?= $o["ID_OBAT"] ?>"><?= $o["NAMA_OBAT"] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>PEMBELI</label>
-                                    <input type="text" class="form-control" name="pembeli" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>TANGGAL TRANSAKSI</label>
-                                    <input type="date" class="form-control" name="tanggal_transaksi" value="<?= date("Y-m-d") ?>" required>
-                                </div>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" name="t_tambah" class="btn btn-primary">Save changes</button>
-                            </div>
-                        </div>
-                        <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                </form>
-            </div>
-            <!-- end modal tambah -->
-
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
-                            <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-tambah">
-                                Tambah Transaksi
-                            </button>
                             <!-- /.card -->
                             <div class="card">
                                 <div class="card-header">

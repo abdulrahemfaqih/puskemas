@@ -9,10 +9,8 @@ if (isset($_POST["login"])) {
     $password = $_POST["PASSWORD"];
 
     $user = getUsername($username);
-    var_dump($user);
     $username = $user["USERNAME"];
-    $data_user = getDataLogin($username);
-    // var_dump($data_user);
+    $data_user = getDataLogin($username);;
     if (isset($data_user["NAMA_ADMIN"])) {
         $nama = $data_user["NAMA_ADMIN"];
 
@@ -36,7 +34,6 @@ if (isset($_POST["login"])) {
             $_SESSION["nama_dokter"] = $data_user["NAMA_DOKTER"];
             $_SESSION["id_apoteker"] = $data_user["ID_APOTEKER"];
             $_SESSION["nama_apoteker"] = $data_user["NAMA_APOTEKER"];
-            var_dump($_SESSION);
             echo "<script>
             alert('login sukses, Selamat Datang $nama ')
             window.location.href = 'index.php';

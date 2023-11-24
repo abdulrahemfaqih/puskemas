@@ -7,10 +7,9 @@ $title = "Data Dokter";
 include "layouts/header.php";
 include "../data/database.php";
 $allDokter = getAllDataDokter();
-// var_dump($allDokter);
 
 if (isset($_POST['t_tambah'])) {
-    if (insertUser($_POST,2)) {
+    if (insertUser($_POST, 2)) {
         InsertDataDokter($_POST);
     }
     header("Location: data_dokter.php");
@@ -94,28 +93,31 @@ $jeniskelamin = array("Laki-laki", "Perempuan");
                                 <div class="mb-3">
                                     <label>SPESIALIS</label>
                                     <select class="form-control select2" name="spesialis" style="width: 100%;">
-                                        <option value="Laki-laki">
+                                        <option value="Spesialis THT">
                                             Spesialis THT
                                         </option>
-                                        <option value="Perempuan">
+                                        <option value="Spesialis Penyakit Dalam">
                                             Spesialis Penyakit Dalam
                                         </option>
-                                        <option value="Perempuan">
+                                        <option value="Spesialis Anak">
                                             Spesialis Anak
                                         </option>
-                                        <option value="Perempuan">
+                                        <option value="Spesialis Penyakit Dalam">
                                             Spesialis Penyakit Dalam
                                         </option>
-                                        <option value="Perempuan">
+                                        <option value="Spesialis Jiwa">
                                             Spesialis Jiwa
                                         </option>
-                                        <option value="Perempuan">
+                                        <option value="Spesialis Mata">
                                             Spesialis Mata
                                         </option>
-                                        <option value="Perempuan">
-                                            Dokter Gigi
+                                        <option value="Spesialis Gigi">
+                                            Spesialis Gigi
                                         </option>
-                                        <option value="Perempuan">
+                                        <option value="Spesialis Mata">
+                                            Spesialis Mata
+                                        </option>
+                                        <option value="Dokter Umum">
                                             Dokter Umum
                                         </option>
                                     </select>

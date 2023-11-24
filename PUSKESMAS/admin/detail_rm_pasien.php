@@ -2,15 +2,14 @@
 include "../data/database.php";
 
 session_start();
-$title = "Pemeriksaan";
+$title = "Detail Rekam Medis";
 include "layouts/header.php";
 
-if ($_SESSION["id_dokter"] != NULL) {
-    $id_dokter = $_SESSION["id_dokter"];
-}
 
-// var_dump($_SESSION);
-$data_pemeriksaan = getDataAntrianAndPemeriksaanWhereIdDokter($id_dokter);
+$id_pasien = $_GET["id_pasien"];
+$data_pemeriksaan = getDataAntrianAndPemeriksaanByIdPasien($id_pasien);
+
+
 ?>
 
 <body class="hold-transition sidebar-mini">
@@ -24,7 +23,7 @@ $data_pemeriksaan = getDataAntrianAndPemeriksaanWhereIdDokter($id_dokter);
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Data Pemeriksaan</h1>
+                            <h1>Data Rekam Medis Pasien</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -49,10 +48,9 @@ $data_pemeriksaan = getDataAntrianAndPemeriksaanWhereIdDokter($id_dokter);
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th style="width: 130px;">AKSI</th>
                                                 <th style="width: 20px;">NO</th>
-                                                <th>ID ANTRIAN </th>
-                                                <th>TANGGAL RESERVASI</th>
+                                                <th>ID PEMERIKSAAN</th>
+                                                <th>TANGGAL PEMERIKSAAN</th>
                                                 <th>ID PASIEN</th>
                                                 <th>NAMA PASIEN </th>
                                                 <th>KELUHAN</th>
@@ -62,38 +60,28 @@ $data_pemeriksaan = getDataAntrianAndPemeriksaanWhereIdDokter($id_dokter);
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $no = 1;
-                                            foreach ($data_pemeriksaan as $d) : ?>
-                                                <tr>
-                                                    <td>
-                                                        <?php if ($d["STATUS"] == 1) : ?>
-                                                            <a class="btn btn-success btn-sm">
-                                                                Pemeriksaan Selesai
-                                                            </a>
-                                                        <?php else : ?>
-                                                            <a class="btn btn-warning btn-sm" href="hasil_pemeriksaan.php?id_pemeriksaan=<?= $d["ID_PEMERIKSAAN"] ?>">
-                                                                Periksa
-                                                            </a>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td><?= $no++ ?></td>
-                                                    <td><?= $d["ID_PEMERIKSAAN"] ?></td>
-                                                    <td><?= $d["TGL_RESERVASI"] ?></td>
-                                                    <td><?= $d["ID_PASIEN"] ?></td>
-                                                    <td><?= $d["NAMA_PASIEN"] ?></td>
-                                                    <td><?= $d["KELUHAN"] ?></td>
-                                                    <td><?= $d["DIAGNOSA"] ?></td>
-                                                    <td><?= $d["HASIL_PEMERIKSAAN"] ?></td>
-                                                    <td><?= $d["TINDAKAN"] ?></td>
-                                                </tr>
-                                            <?php endforeach; ?>
+                                            <?php if (!empty($data_pemeriksaan)) : ?>
+                                                <?php $no = 1;
+                                                foreach ($data_pemeriksaan as $d) : ?>
+                                                    <tr>
+                                                        <td><?= $no++ ?></td>
+                                                        <td><?= $d["ID_PEMERIKSAAN"] ?></td>
+                                                        <td><?= $d["TGL_RESERVASI"] ?></td>
+                                                        <td><?= $d["ID_PASIEN"] ?></td>
+                                                        <td><?= $d["NAMA_PASIEN"] ?></td>
+                                                        <td><?= $d["KELUHAN"] ?></td>
+                                                        <td><?= $d["DIAGNOSA"] ?></td>
+                                                        <td><?= $d["HASIL_PEMERIKSAAN"] ?></td>
+                                                        <td><?= $d["TINDAKAN"] ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>AKSI</th>
                                                 <th style="width: 30px;">NO</th>
-                                                <th>ID ANTRIAN </th>
-                                                <th>TANGGAL ANTRIAN</th>
+                                                <th>ID PEMERIKSAAN</th>
+                                                <th>TANGGAL PEMERIKSAAN</th>
                                                 <th>ID PASIEN</th>
                                                 <th>NAMA PASIEN </th>
                                                 <th>KELUHAN</th>

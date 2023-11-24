@@ -6,7 +6,7 @@ $title = "Pemeriksaan";
 include "layouts/header.php";
 
 
-// var_dump($_SESSION);
+
 $data_pemeriksaan = getDataPemeriksaanByStatus();
 ?>
 
@@ -48,8 +48,8 @@ $data_pemeriksaan = getDataPemeriksaanByStatus();
                                             <tr>
                                                 <th style="width: 130px;">AKSI</th>
                                                 <th style="width: 20px;">NO</th>
-                                                <th>ID ANTRIAN </th>
-                                                <th>TANGGAL ANTRIAN</th>
+                                                <th>ID PEMERIKSAAN</th>
+                                                <th>TANGGAL PEMERIKSAAN</th>
                                                 <th>ID PASIEN</th>
                                                 <th>NAMA PASIEN </th>
                                                 <th>KELUHAN</th>
@@ -89,8 +89,8 @@ $data_pemeriksaan = getDataPemeriksaanByStatus();
                                             <tr>
                                                 <th>AKSI</th>
                                                 <th style="width: 30px;">NO</th>
-                                                <th>ID ANTRIAN </th>
-                                                <th>TANGGAL ANTRIAN</th>
+                                                <th>ID PEMERIKSAAN</th>
+                                                <th>TANGGAL PEMERIKSAAN</th>
                                                 <th>ID PASIEN</th>
                                                 <th>NAMA PASIEN </th>
                                                 <th>KELUHAN</th>
