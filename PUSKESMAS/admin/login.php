@@ -9,9 +9,19 @@ if (isset($_POST["login"])) {
     $password = $_POST["PASSWORD"];
 
     $user = getUsername($username);
+    var_dump($user);
     $username = $user["USERNAME"];
     $data_user = getDataLogin($username);
-    $nama = isset($data_user["NAMA_ADMIN"]) ? $data_user["NAMA_ADMIN"] : $data_user["NAMA_DOKTER"];
+    // var_dump($data_user);
+    if (isset($data_user["NAMA_ADMIN"])) {
+        $nama = $data_user["NAMA_ADMIN"];
+
+    } elseif (isset($data_user["NAMA_DOKTER"])) {
+        $nama = $data_user["NAMA_DOKTER"];
+    } else {
+        $nama = $data_user["NAMA_APOTEKER"];
+    }
+    // $nama = isset($data_user["NAMA_ADMIN"]) ? $data_user["NAMA_ADMIN"] : $data_user["NAMA_DOKTER"];
 
 
 
@@ -24,8 +34,9 @@ if (isset($_POST["login"])) {
             $_SESSION["nama_admin"] = $nama;
             $_SESSION["id_dokter"] = $data_user["ID_DOKTER"];
             $_SESSION["nama_dokter"] = $data_user["NAMA_DOKTER"];
-            // var_dump($_SESSION);
-            // exit;
+            $_SESSION["id_apoteker"] = $data_user["ID_APOTEKER"];
+            $_SESSION["nama_apoteker"] = $data_user["NAMA_APOTEKER"];
+            var_dump($_SESSION);
             echo "<script>
             alert('login sukses, Selamat Datang $nama ')
             window.location.href = 'index.php';

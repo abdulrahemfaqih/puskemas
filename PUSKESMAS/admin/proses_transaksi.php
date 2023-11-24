@@ -1,38 +1,38 @@
 <?php
 session_start();
 include "../data/database.php";
-if (isset($_GET["id_pemeriksaan"])) {
-    $id_pemeriksaan = $_GET["id_pemeriksaan"];
-    $data_id_pemeriksaan = getDataAntrianAndPemeriksaanByIdPem($id_pemeriksaan);
+if (isset($_GET["id_transaksi"])) {
+    $id_transaksi = $_GET["id_transaksi"];
+    $data_id_transaksi = getDataTransaksiPemeriksaanById($id_transaksi)[0];
+    $id_pasien = $data_id_transaksi["ID_PASIEN"];
+    $id_dokter = $data_id_transaksi["ID_DOKTER"];
+    $nama_dokter = $data_id_transaksi["NAMA_DOKTER"];
+    $nama_pasien = $data_id_transaksi["NAMA_PASIEN"];
+    $tanggal_transaksi = $data_id_transaksi["TGL_TRANSAKSI"];
+    $id_pemeriksaan = $data_id_transaksi["ID_PEMERIKSAAN"];
 }
 
-$id_pasien = $data_id_pemeriksaan["ID_PASIEN"];
-$id_dokter = $data_id_pemeriksaan["ID_DOKTER"];
 
 
 if (isset($_POST["proses"])) {
-    $id_pemeriksaan = $_POST["id_pemeriksaan"];
     $id_transaksi = $_POST["id_transaksi"];
-    if (hasilPemeriksaan($_POST) && tambahTransaksi($id_transaksi, $id_pemeriksaan, $id_pasien,  $id_dokter)) {
+    if (updateTransaksiPemeriksaanById($_POST)) {
         echo "<script>
-        alert('pemeriksaan $id_pemeriksaan telah selesai ')
-        window.location.href = 'pemeriksaan.php?tab=pemeriksaan'
+        alert('transaksi $id_transaksi telah selesai')
+        window.location.href = 'transaksi.php?tab=transaksi'
         </script>
         ";
     } else {
         echo "<script>
-        alert('pemeriksaan $id_pemeriksaan gagal di proses')
-        window.location.href = 'pemeriksaan.php?tab=pemeriksaan'
+        alert('transaksi $id_transaksi gagal di proses')
+        window.location.href = 'transaksi.php?tab=transaksi'
         </script>
         ";
     }
 }
 
 
-$all_poli = allPoli();
 
-
-$id_dokter = $_SESSION["id_dokter"];
 $title = "Proses Reservasi";
 include "layouts/header.php";
 
@@ -80,73 +80,54 @@ include "layouts/header.php";
                                     <div class="card-body">
                                         <div class="table table-responsive">
                                             <table class="table table-bordered">
-                                                <?php
-                                                $id_transaksi = generateID("tb_transaksi_pemeriksaan", "ID_TRANSAKSI", "TP");
-                                                ?>
                                                 <input type="hidden" name="id_transaksi" value="<?= $id_transaksi ?>">
-                                                <input type="hidden" name="id_pemeriksaan" value="<?= $id_pemeriksaan ?>">
                                                 <tr>
-                                                    <th style="width: 300px;">ID PEMERIKSAAN</th>
-                                                    <td><?= $data_id_pemeriksaan["ID_PEMERIKSAAN"] ?></td>
+                                                    <th style="width: 300px;">ID TRANSAKSI</th>
+                                                    <td><?= $data_id_transaksi["ID_TRANSAKSI"] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <?php
-                                                    $tanggal = date("Y-m-d");
-                                                    ?>
                                                     <th>TANGGAL</th>
-                                                    <td><input type="date" name="tanggal" id="tanggal" value="<?= $tanggal ?>"></td>
+                                                    <td><input type="date" class="form-control w-25" name="tanggal" id="tanggal" value="<?= $tanggal_transaksi ?>"></td>
                                                 </tr>
                                                 <tr>
                                                     <th>PASIEN</th>
                                                     <td>
-                                                        <?= $data_id_pemeriksaan["ID_PASIEN"] ?> - <?= $data_id_pemeriksaan["NAMA_PASIEN"] ?>
+                                                        <?= $id_pasien ?> - <?= $nama_pasien ?>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <th>DOKTER</th>
                                                     <td>
-                                                        <div class="form-group">
-                                                            <?= $nama ?>
-                                                        </div>
+                                                        <?= $id_dokter ?> - <?= $nama_dokter ?>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th>KELUHAN</th>
+                                                    <th>ID PEMERIKSAAN</th>
                                                     <td>
-                                                        <textarea class="form-control" rows="3"><?= $data_id_pemeriksaan["KELUHAN"] ?></textarea>
+                                                        <?= $id_pemeriksaan ?>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th>
-                                                        POLI
-                                                    </th>
+                                                    <th>JUMLAH PEMBAYARAN</th>
+                                                    <td>
+                                                        <input type="number" placeholder="jumlah pembayaran" name="jumlah_pembayaran" class="form-control w-25">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>KETERANGAN PEMBAYARAN</th>
+                                                    <td>
+                                                        <textarea placeholder="keterangan_pembayaran" name="keterangan_pembayaran" class="form-control" rows="3"></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>STATUS PEMBAYARAN</th>
                                                     <td>
                                                         <div class="form-group">
-                                                            <select name="poli" required class="form-control select2" style="width: 25%">
-                                                                <option selected disabled="">PILIH POLI</option>
-                                                                <?php foreach ($all_poli as $p) : ?>
-                                                                    <option value="<?= $p["ID_POLI"] ?>"><?= $p["ID_POLI"] ?> | <?= $p["NAMA_POLI"] ?></option>
-                                                                <?php endforeach; ?>
+                                                            <select name="status_pembayaran" required class="form-control select2" style="width: 25%">
+                                                                <option value="1" <?= $data_id_transaksi["STATUS_PEMBAYARAN"] == 1 ? "selected" : '' ?>>SELESAI</option>
+                                                                <option value="2" <?= $data_id_transaksi["STATUS_PEMBAYARAN"] == 0 ? "selected" : '' ?>>BELUM LUNAS</option>
                                                             </select>
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>DIAGNOSA</th>
-                                                    <td>
-                                                        <textarea class="form-control" name="diagnosa" rows="3"></textarea>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>HASIL PEMERIKSAAN</th>
-                                                    <td>
-                                                        <textarea class="form-control" name="hasil_pemeriksaan" rows="3"></textarea>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>TINDAKAN PEMERIKSAAN</th>
-                                                    <td>
-                                                        <textarea class="form-control" name="tindakan" rows="3"></textarea>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -155,6 +136,7 @@ include "layouts/header.php";
                                             <a href="antrian.php?tab=antrian" class="btn btn-warning btn-sm mx-2">Kembali</a>
                                             <button type="submit" name="proses" class="btn btn-success btn-sm">Proses</button>
                                         </div>
+
                                     </div>
                                 </form>
                                 <!-- /.card-body -->

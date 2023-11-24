@@ -6,8 +6,6 @@ $title = "Pemeriksaan";
 include "layouts/header.php";
 
 
-
-// var_dump($_SESSION);
 $getDataTransaksi = getDataTransaksiPemeriksaan();
 ?>
 
@@ -44,64 +42,67 @@ $getDataTransaksi = getDataTransaksiPemeriksaan();
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <table id="example1" class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th style="width: 130px;">AKSI</th>
-                                                <th style="width: 20px;">NO</th>
-                                                <th>ID ANTRIAN </th>
-                                                <th>TANGGAL ANTRIAN</th>
-                                                <th>ID PASIEN</th>
-                                                <th>NAMA PASIEN </th>
-                                                <th>KELUHAN</th>
-                                                <th>DIAGNOSA</th>
-                                                <th>HASIL PEMERIKSAAN</th>
-                                                <th>TINDAKAN PEMERIKSAAN</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php $no = 1;
-                                            foreach ($data_pemeriksaan as $d) : ?>
+                                    <div class="table table-responsive">
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
                                                 <tr>
-                                                    <td>
-                                                        <?php if ($d["STATUS_PEMBAYARAN"] == 1) : ?>
-                                                            <a class="btn btn-success btn-sm">
-                                                                Pembayaran Selesai
-                                                            </a>
-                                                        <?php else : ?>
-                                                            <a class="btn btn-warning btn-sm" href="hasil_pemeriksaan.php?id_pemeriksaan=<?= $d["ID_PEMERIKSAAN"] ?>">
-                                                                Pembayaran
-                                                            </a>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                    <td><?= $no++ ?></td>
-                                                    <td><?= $d["ID_PEMERIKSAAN"] ?></td>
-                                                    <td><?= $d["TGL_RESERVASI"] ?></td>
-                                                    <td><?= $d["ID_PASIEN"] ?></td>
-                                                    <td><?= $d["NAMA_PASIEN"] ?></td>
-                                                    <td><?= $d["KELUHAN"] ?></td>
-                                                    <td><?= $d["DIAGNOSA"] ?></td>
-                                                    <td><?= $d["HASIL_PEMERIKSAAN"] ?></td>
-                                                    <td><?= $d["TINDAKAN"] ?></td>
+                                                    <th style="width: 180px;">AKSI</th>
+                                                    <th style="width: 20px;">NO</th>
+                                                    <th>ID TRANSAKSI</th>
+                                                    <th>TANGGAL TRNSAKSI</th>
+                                                    <th>NAMA PASIEN </th>
+                                                    <th>NAMA DOKTER</th>
+                                                    <th>ID PEMERIKSAAN</th>
+                                                    <th>JUMLAH PEMBAYARAN</th>
+                                                    <th>STATUS PEMBAYARAN</th>
                                                 </tr>
-                                            <?php endforeach; ?>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>AKSI</th>
-                                                <th style="width: 30px;">NO</th>
-                                                <th>ID ANTRIAN </th>
-                                                <th>TANGGAL ANTRIAN</th>
-                                                <th>ID PASIEN</th>
-                                                <th>NAMA PASIEN </th>
-                                                <th>KELUHAN</th>
-                                                <th>DIAGNOSA</th>
-                                                <th>HASIL PEMERIKSAAN</th>
-                                                <th>TINDAKAN PEMERIKSAAN</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-
+                                            </thead>
+                                            <tbody>
+                                                <?php $no = 1;
+                                                foreach ($getDataTransaksi as $g) : ?>
+                                                    <tr>
+                                                        <td>
+                                                            <a class="btn btn-info btn-sm" href="detail_transaksi_pembayaran.php">Detail</a>
+                                                            <?php if ($g["STATUS_PEMBAYARAN"] == 1) : ?>
+                                                                <a class="btn btn-success btn-sm">
+                                                                    Pembayaran Selesai
+                                                                </a>
+                                                            <?php else : ?>
+                                                                <a class="btn btn-warning btn-sm" href="proses_transaksi.php?id_transaksi=<?= $g["ID_TRANSAKSI"] ?>">
+                                                                    Pembayaran
+                                                                </a>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td><?= $no++ ?></td>
+                                                        <td><?= $g["ID_TRANSAKSI"] ?></td>
+                                                        <td><?= $g["TGL_TRANSAKSI"] ?></td>
+                                                        <td><?= $g["NAMA_PASIEN"] ?></td>
+                                                        <td><?= $g["NAMA_DOKTER"] ?></td>
+                                                        <td><?= $g["ID_PEMERIKSAAN"] ?></td>
+                                                        <td><?= $g["JUMLAH_PEMBAYARAN"] ?></td>
+                                                        <?php if ($g["STATUS_PEMBAYARAN"] == 1) : ?>
+                                                            <td>Lunas</td>
+                                                        <?php else : ?>
+                                                            <td>Belum Lunas</td>
+                                                        <?php endif; ?>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th style="width: 130px;">AKSI</th>
+                                                    <th style="width: 20px;">NO</th>
+                                                    <th>ID TRANSAKSI</th>
+                                                    <th>TANGGAL TRNSAKSI</th>
+                                                    <th>NAMA PASIEN </th>
+                                                    <th>NAMA DOKTER</th>
+                                                    <th>ID PEMERIKSAAN</th>
+                                                    <th>JUMLAH PEMBAYARAN</th>
+                                                    <th>STATUS PEMBAYARAN</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                             </div>

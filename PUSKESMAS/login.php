@@ -1,5 +1,6 @@
 <?php include "data/database.php"; ?>
 <?php
+
 session_start();
 if (isset($_POST['submitlogin'])) {
     $password = $_POST["password"];

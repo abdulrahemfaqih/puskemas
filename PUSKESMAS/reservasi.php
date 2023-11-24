@@ -2,7 +2,9 @@
 include "data/database.php";
 session_start();
 
-$id_pasien = $_SESSION["id_pasien"];
+if (!empty($_SESSION["id_pasien"])) {
+    $id_pasien = $_SESSION["id_pasien"];
+}
 
 
 if (empty($_SESSION["login_pasien"])) {
@@ -16,12 +18,11 @@ if (empty($_SESSION["login_pasien"])) {
 if (isset($_POST["submit"])) {
     $id_reservasi = $_POST["id_pe"];
     $tanggal = $_POST["tgl_reservasi"];
-    if(tambahPemeriksaan($_POST)) {
+    if (tambahPemeriksaan($_POST)) {
         echo "<script>
         alert('id reservasi $id_reservasi telah dibuat, silah kan datang di tanggal $tanggal ');
         window.location.href = 'profile.php'
         </script>";
-
     } else {
         echo "<script>
         alert('id reservasi $id_reservasi gagal dibuat');

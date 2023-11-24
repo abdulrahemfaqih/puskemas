@@ -89,7 +89,7 @@ $data_reservasi_rm = getDataAntrianAndPemeriksaanByIdPasien($id_pasien);
                                     <td><?= $data["KELUHAN"] ?></td>
                                     <td><?= $data["DIAGNOSA"] ?></td>
                                     <td><?= $data["HASIL_PEMERIKSAAN"] ?></td>
-                                    <td></td>
+                                    <td><?= $data["TINDAKAN"] ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else : ?>

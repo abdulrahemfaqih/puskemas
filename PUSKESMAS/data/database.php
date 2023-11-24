@@ -283,11 +283,23 @@ function getUsername($username)
 
 function getDataLogin($username)
 {
-    return mysqli_query(DB, "SELECT tb_user.*, tb_dokter.ID_USER AS ID_DOKTER_USER, tb_dokter.*,  tb_admin.ID_USER AS ID_ADMIN_USER, tb_admin.*
-    FROM tb_user
-    LEFT JOIN tb_dokter ON tb_user.ID_USER = tb_dokter.ID_USER
-    LEFT JOIN tb_admin ON tb_user.ID_USER = tb_admin.ID_USER
-    WHERE tb_user.USERNAME = '$username';")->fetch_assoc();
+    return mysqli_query(DB, "
+        SELECT
+            tb_user.*,
+            tb_dokter.ID_USER AS ID_DOKTER_USER,
+            tb_dokter.*,
+            tb_admin.ID_USER AS ID_ADMIN_USER,
+            tb_admin.*,
+            tb_apoteker.ID_USER AS ID_APOTEKER_USER,
+            tb_apoteker.*
+        FROM
+            tb_user
+            LEFT JOIN tb_dokter ON tb_user.ID_USER = tb_dokter.ID_USER
+            LEFT JOIN tb_admin ON tb_user.ID_USER = tb_admin.ID_USER
+            LEFT JOIN tb_apoteker ON tb_apoteker.ID_USER = tb_apoteker.ID_USER
+        WHERE
+            tb_user.USERNAME = '$username'
+    ")->fetch_assoc();
 }
 
 //==============================TABEL PEMERIKSAAN ======================
@@ -304,7 +316,7 @@ function getDataAntrianAndPemeriksaanWhereDokterNull()
     FROM tb_pemeriksaan
     LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
     WHERE tb_pemeriksaan.ID_DOKTER IS NULL")
-    ->fetch_all(MYSQLI_ASSOC);
+        ->fetch_all(MYSQLI_ASSOC);
 }
 function getDataAntrianAndPemeriksaanWhereIdDokter($id_dokter)
 {
@@ -312,7 +324,7 @@ function getDataAntrianAndPemeriksaanWhereIdDokter($id_dokter)
     FROM tb_pemeriksaan
     LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
     WHERE ID_DOKTER = '$id_dokter'")
-    ->fetch_all(MYSQLI_ASSOC);
+        ->fetch_all(MYSQLI_ASSOC);
 }
 function getDataAntrianAndPemeriksaanByIdPem($id_pemeriksaan)
 {
@@ -321,7 +333,8 @@ function getDataAntrianAndPemeriksaanByIdPem($id_pemeriksaan)
     WHERE ID_PEMERIKSAAN = '$id_pemeriksaan'")->fetch_all(MYSQLI_ASSOC)[0];
 }
 
-function hapusPemeriksan($id_pemeriksaan) {
+function hapusPemeriksan($id_pemeriksaan)
+{
     return mysqli_query(DB, "DELETE FROM tb_pemeriksaan WHERE ID_PEMERIKSAAN = '$id_pemeriksaan'");
 }
 
@@ -357,7 +370,8 @@ function generateNoAntrian()
     return $next_nomor;
 }
 
-function updatePemeriksaanById($data) {
+function updatePemeriksaanById($data)
+{
     $id_pemeriksaan = $data["id_pemeriksaan"];
     $tanggal = $data["tanggal"];
     $dokter = $data["dokter"];
@@ -369,7 +383,8 @@ function updatePemeriksaanById($data) {
     ");
 }
 
-function hasilPemeriksaan($data) {
+function hasilPemeriksaan($data)
+{
     $id_pemeriksaan = $data["id_pemeriksaan"];
     $poli = $data["poli"];
     $diagnosa = $data["diagnosa"];
@@ -385,7 +400,6 @@ function hasilPemeriksaan($data) {
     `STATUS` = '$status'
     WHERE ID_PEMERIKSAAN = '$id_pemeriksaan'
     ");
-
 }
 
 // =========================== TABEL TRANSAKSI ============================
@@ -407,11 +421,106 @@ function tambahTransaksi($id_tr, $id_pe, $id_ps, $id_do)
 
 
 
-
-function getDataTransaksiPemeriksaan() {
+function getDataTransaksiPemeriksaan()
+{
     return mysqli_query(DB, "SELECT tb_transaksi_pemeriksaan.*, tb_pasien.NAMA_PASIEN, tb_dokter.NAMA_DOKTER
     FROM tb_transaksi_pemeriksaan
     LEFT JOIN tb_pasien ON tb_transaksi_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
     LEFT JOIN tb_dokter ON tb_transaksi_pemeriksaan.ID_DOKTER = tb_dokter.ID_DOKTER
     ")->fetch_all(MYSQLI_ASSOC);
 }
+
+function getDataTransaksiPemeriksaanById($id_transaksi)
+{
+    return mysqli_query(DB, "SELECT tb_transaksi_pemeriksaan.*, tb_pasien.NAMA_PASIEN, tb_dokter.NAMA_DOKTER
+    FROM tb_transaksi_pemeriksaan
+    LEFT JOIN tb_pasien ON tb_transaksi_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
+    LEFT JOIN tb_dokter ON tb_transaksi_pemeriksaan.ID_DOKTER = tb_dokter.ID_DOKTER
+    WHERE ID_TRANSAKSI = '$id_transaksi'
+    ")->fetch_all(MYSQLI_ASSOC);
+}
+
+function updateTransaksiPemeriksaanById($data)
+{
+    $id_transaksi = $data["id_transaksi"];
+    $jumlah_pembayaran = $data["jumlah_pembayaran"];
+    $status_pembayaran = $data["status_pembayaran"];
+    $keterangan_pembayaran = $data["keterangan_pembayaran"];
+
+    return mysqli_query(DB, "UPDATE tb_transaksi_pemeriksaan SET
+    JUMLAH_PEMBAYARAN = '$jumlah_pembayaran',
+    KETERANGAN = '$keterangan_pembayaran',
+    STATUS_PEMBAYARAN = '$status_pembayaran'
+    WHERE ID_TRANSAKSI = '$id_transaksi'
+    ");
+}
+
+function getDataTransaksiPemeriksaanByStatus()
+{
+    return mysqli_query(DB, "SELECT tb_transaksi_pemeriksaan.*, tb_pasien.NAMA_PASIEN, tb_dokter.NAMA_DOKTER
+    FROM tb_transaksi_pemeriksaan
+    LEFT JOIN tb_pasien ON tb_transaksi_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
+    LEFT JOIN tb_dokter ON tb_transaksi_pemeriksaan.ID_DOKTER = tb_dokter.ID_DOKTER
+    WHERE STATUS_PEMBAYARAN = 1
+    ")->fetch_all(MYSQLI_ASSOC);
+}
+
+
+function getDataPemeriksaanByStatus()
+{
+    return mysqli_query(DB, "SELECT tb_pemeriksaan.*, tb_pasien.NAMA_PASIEN
+    FROM tb_pemeriksaan
+    LEFT JOIN tb_pasien ON tb_pemeriksaan.ID_PASIEN = tb_pasien.ID_PASIEN
+    WHERE `STATUS` = '1'")->fetch_all(MYSQLI_ASSOC);
+}
+
+
+// ================================ TABEL APOTEKER ===============================
+
+
+
+
+function getAllApoteker()
+{
+    return mysqli_query(DB, "SELECT tb_apoteker.*, tb_user.USERNAME
+    FROM tb_apoteker
+    LEFT JOIN tb_user ON tb_apoteker.ID_USER = tb_user.ID_USER
+    ")->fetch_all(MYSQLI_ASSOC);
+}
+
+function tambahApoteker($data)
+{
+    $id_user = mysqli_insert_id(DB);
+    $id_apoteker = htmlspecialchars($data["id_apoteker"]);
+    $nama_apoteker = htmlspecialchars($data["nama_apoteker"]);
+    $no_telp = htmlspecialchars($data["no_telp"]);
+    $alamat = htmlspecialchars($data["alamat"]);
+
+    return mysqli_query(DB, "INSERT INTO tb_apoteker (ID_APOTEKER, ID_USER, NAMA_APOTEKER, NO_TELP, ALAMAT_APOTEKER)
+    VALUES
+    ('$id_apoteker', '$id_user', '$nama_apoteker', '$no_telp', '$alamat')
+    ");
+}
+
+function ubahApoteker($data)
+{
+    $id_apoteker = htmlspecialchars($data["id_apoteker"]);
+    $nama_apoteker = htmlspecialchars($data["nama_apoteker"]);
+    $no_telp = htmlspecialchars($data["no_telp"]);
+    $alamat = htmlspecialchars($data["alamat"]);
+
+    return mysqli_query(DB, "UPDATE tb_apoteker SET
+    NAMA_APOTEKER = '$nama_apoteker',
+    NO_TELP = '$no_telp',
+    ALAMAT_APOTEKER = '$alamat'
+    WHERE ID_APOTEKER = '$id_apoteker'
+    ");
+}
+
+function hapusApoteker($id_apoteker)
+{
+    return mysqli_query(DB, "DELETE FROM tb_apoteker WHERE ID_APOTEKER = '$id_apoteker'");
+}
+
+
+// function deleteUsername($)

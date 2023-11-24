@@ -37,36 +37,44 @@ $current_tab = isset($_GET["tab"]) ? $_GET["tab"] : '';
                         </p>
                     </a>
                 </li>
-                <?php if($_SESSION["level_admin"] == 1) : ?>
+                <?php if ($_SESSION["level_admin"] == 1) : ?>
+                    <li class="nav-item">
+                        <a href="antrian.php?tab=antrian" class="nav-link <?= $current_tab == 'antrian' ? 'active' : '' ?>">
+                            <i class="nav-icon fas fa-columns"></i>
+                            <p>
+                                Antrian
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="transaksi.php?tab?transaksi" class="nav-link <?= $current_tab == 'transaksi' ? 'active' : '' ?>">
+                            <i class="nav-icon fas fa-cash-register"></i>
+                            <p>
+                                Transaksi Pemeriksaan
+                            </p>
+                        </a>
+                    </li>
+                <?php endif ?>
                 <li class="nav-item">
-                    <a href="antrian.php?tab=antrian" class="nav-link <?= $current_tab == 'antrian' ? 'active' : '' ?>">
-                        <i class="nav-icon fas fa-columns"></i>
-                        <p>
-                            Antrian
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="transaksi.php?tab?transaksi" class="nav-link <?= $current_tab == 'transaksi' ? 'active' : '' ?>">
+                    <a href="transaksi_obat.php?tab=transaksi_obat" class="nav-link <?= $current_tab == 'transaksi_obat' ? 'active' : '' ?>">
                         <i class="nav-icon fas fa-cash-register"></i>
                         <p>
-                            Transaksi
+                            Transaksi Obat
                         </p>
                     </a>
                 </li>
-                <?php endif ?>
-                <?php if($_SESSION["level_admin"] == 2) : ?>
-                <li class="nav-item">
-                    <a href="pemeriksaan.php?tab=pemeriksaan" class="nav-link <?= $current_tab == 'pemeriksaan' ? 'active' : '' ?>">
-                        <i class="nav-icon fas fa-stethoscope"></i>
-                        <p>
-                            Pemeriksaan
-                        </p>
-                    </a>
-                </li>
+                <?php if ($_SESSION["level_admin"] == 2) : ?>
+                    <li class="nav-item">
+                        <a href="pemeriksaan.php?tab=pemeriksaan" class="nav-link <?= $current_tab == 'pemeriksaan' ? 'active' : '' ?>">
+                            <i class="nav-icon fas fa-stethoscope"></i>
+                            <p>
+                                Pemeriksaan
+                            </p>
+                        </a>
+                    </li>
                 <?php endif; ?>
                 <?php if ($_SESSION["level_admin"] == 1) : ?>
-                    <li class="nav-item <?= ($current_tab == 'data_admin' || $current_tab == 'data_dokter' || $current_tab == 'data_poli' || $current_tab == 'data_obat') ? 'menu-open' : ''; ?>">
+                    <li class="nav-item <?= ($current_tab == 'data_admin' || $current_tab == 'data_dokter' || $current_tab == 'data_poli' || $current_tab == 'data_obat' || $current_tab == 'data_transaksi' || $current_tab == 'data_pemeriksaan' || $current_tab == "data_apoteker") ? 'menu-open' : ''; ?>">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-th"></i>
                             <p>
@@ -103,6 +111,12 @@ $current_tab = isset($_GET["tab"]) ? $_GET["tab"] : '';
                                 <a href="data_dokter.php?tab=data_dokter" class="nav-link <?= $current_tab == 'data_dokter' ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Dokter</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="data_apoteker.php?tab=data_apoteker" class="nav-link <?= $current_tab == 'data_apoteker' ? 'active' : '' ?>">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Data Apoteker</p>
                                 </a>
                             </li>
                             <li class="nav-item">
